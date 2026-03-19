@@ -1,5 +1,7 @@
+import "reflect-metadata";
+import "@/di/container";
 import app from "./app";
-import dbConnect from "./config/dbConfig";
+import dbConnect from "./config/db.config";
 import { env } from "./config/env";
 
 const startServer = async () => {

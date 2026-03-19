@@ -3,7 +3,6 @@ import { env } from "./env";
 
 const dbConnect = async () => {
     try {
-      console.log("mongo url : ", env.MONGO_URI);
     if (!env.MONGO_URI) {
       throw new Error("❌ MONGO_URI is not defined");
     }
