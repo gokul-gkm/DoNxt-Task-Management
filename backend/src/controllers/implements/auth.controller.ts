@@ -5,6 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { TOKENS } from "@/di/tokens";
 import { IAuthController } from "../interfaces/auth.controller.interface";
 import { IAuthService } from "@/services/interfaces/auth.service.interface";
+import { setCookie } from "@/utils/cookie.utils";
 
 @Service()
 export class AuthController implements IAuthController{
@@ -52,6 +53,20 @@ export class AuthController implements IAuthController{
         const result = await this._authService.resendVerification(email);
         return res.status(StatusCodes.OK).json(result);
     };
+
+     signIn = async (req: Request, res: Response): Promise<Response> => {
+    const result = await this._authService.signIn(req.body);
+    setCookie(res, "refresh_token", String(result.refreshToken));
+
+    return res.status(StatusCodes.OK).json({
+      status: true,
+      message: result.message,
+      email: result.email,
+      userName: result.userName,
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
+    });
+  };
 }
 
 export const authController = Container.get(AuthController);

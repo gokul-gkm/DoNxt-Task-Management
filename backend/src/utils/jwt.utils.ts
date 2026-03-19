@@ -24,7 +24,6 @@ export const verifyAccessToken = (token: string) => {
   }
 };
 
-
 export const verifyEmailToken = (token: string): string => {
   try {
     const decoded = jwt.verify(token,env.VERIFY_EMAIL_SECRET!) as {
@@ -35,5 +34,3 @@ export const verifyEmailToken = (token: string): string => {
     throw new Error("Invalid or expired verification token");
   }
 };
-
-

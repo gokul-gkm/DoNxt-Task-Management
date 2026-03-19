@@ -1,6 +1,7 @@
 import { Inject, Service } from "typedi";
+import bcrypt from "bcryptjs"
 import { IAuthService } from "../interfaces/auth.service.interface";
-import { SignUpDTO } from "@/dtos/auth.dto";
+import { SignInDTO, SignUpDTO } from "@/dtos/auth.dto";
 import {
   AuthResponse,
   SignInResponse,
@@ -169,6 +170,52 @@ export class AuthService implements IAuthService {
     } catch (error) {
       if (error instanceof AppError) throw error;
       console.error("Resend Verification Error:", error);
+      throw new AppError(
+        responseMessage.ERROR_MESSAGE,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+    }
+    
+    async signIn(data: SignInDTO): Promise<SignInResponse> {
+    try {
+      const { email, password } = data;
+      const existingUser = await this._userRepository.findByEmail(email);
+      if (!existingUser) {
+        throw new AppError("Invalid Credentials", StatusCodes.BAD_REQUEST);
+      }
+      if (!existingUser.is_verified) {
+        throw new AppError(
+          "Email not verified. Please verify your email.",
+          StatusCodes.UNAUTHORIZED,
+        );
+      }
+
+      const comparePassword = await bcrypt.compare(
+        password,
+        existingUser.password,
+      );
+      if (!comparePassword) {
+        throw new AppError("Incorrect password", StatusCodes.BAD_REQUEST);
+      }
+      const accessToken = generateAccessToken({ id: existingUser._id });
+      const refreshToken = generateRefreashToken({ id: existingUser._id });
+
+      return {
+        status: true,
+        message: "Sign in successfully completed",
+        userName: existingUser.firstName + " "+ existingUser.lastName,
+        email: existingUser.email,
+        accessToken,
+        refreshToken,
+      };
+    } catch (error) {
+      if (error instanceof AppError) {
+        throw error;
+      }
+
+      console.error("SignIn Error:", error);
+
       throw new AppError(
         responseMessage.ERROR_MESSAGE,
         StatusCodes.INTERNAL_SERVER_ERROR,

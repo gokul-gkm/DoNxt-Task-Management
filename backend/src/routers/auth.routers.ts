@@ -7,6 +7,7 @@ const authRoute = Router();
 authRoute.post('/sign-up', asyncHandler(authController.signUp))
 authRoute.post('/verify-email', asyncHandler(authController.verifyEmail))
 authRoute.post('/resend-verification', asyncHandler(authController.resendVerification));
+authRoute.post('/sign-in', asyncHandler(authController.signIn))
 
 
 export default authRoute;

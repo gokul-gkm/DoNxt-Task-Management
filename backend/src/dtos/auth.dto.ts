@@ -6,3 +6,8 @@ export interface SignUpDTO {
   password: string;
   confirmPassword: string;
 }
+
+export interface SignInDTO{
+    email: string,
+    password: string
+}
