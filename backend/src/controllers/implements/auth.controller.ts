@@ -92,6 +92,16 @@ export class AuthController implements IAuthController{
 
         return res.status(StatusCodes.OK).json(result)
     }
+
+    logOut = async (req: Request, res: Response): Promise<Response> => {
+        const refreshToken = req.cookies.refresh_token;
+        if (!refreshToken) {
+        return res.status(StatusCodes.BAD_REQUEST).json({message: "No token provided"})
+        }
+        res.clearCookie("refresh_token");
+
+        return res.status(StatusCodes.OK).json({message: "Logged out successfully"})
+    }
 }
 
 export const authController = Container.get(AuthController);
