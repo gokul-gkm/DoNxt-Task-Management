@@ -6,6 +6,7 @@ import { TOKENS } from "@/di/tokens";
 import { IAuthController } from "../interfaces/auth.controller.interface";
 import { IAuthService } from "@/services/interfaces/auth.service.interface";
 import { setCookie } from "@/utils/cookie.utils";
+import { ForgotPasswordDTO, ResetPaswordDTO } from "@/dtos/auth.dto";
 
 @Service()
 export class AuthController implements IAuthController{
@@ -66,7 +67,31 @@ export class AuthController implements IAuthController{
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
     });
-  };
+    };
+    
+    forgotPassword = async (req: Request, res: Response): Promise<Response> => {
+        const data = req.body as ForgotPasswordDTO;
+        if (!data.email) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            status: false,
+            message: "Email is required"
+        })
+        }
+
+        const result = await this._authService.forgotPassword(data)
+
+        return res.status(StatusCodes.OK).json(result)
+    }
+
+    resetPassword = async (req: Request, res: Response): Promise<Response> => {
+        const data = req.body as ResetPaswordDTO;
+        if (!data.email || !data.token || !data.newPassword || !data.confirmPassword) {
+        return res.status(StatusCodes.BAD_REQUEST).json({status: false, message: "Email, token and password fields are required"})
+        }
+        const result = await this._authService.resetPassword(data);
+
+        return res.status(StatusCodes.OK).json(result)
+    }
 }
 
 export const authController = Container.get(AuthController);

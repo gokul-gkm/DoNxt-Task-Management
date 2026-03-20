@@ -1,7 +1,7 @@
 import { Inject, Service } from "typedi";
 import bcrypt from "bcryptjs"
 import { IAuthService } from "../interfaces/auth.service.interface";
-import { SignInDTO, SignUpDTO } from "@/dtos/auth.dto";
+import { ForgotPasswordDTO, ResetPaswordDTO, SignInDTO, SignUpDTO } from "@/dtos/auth.dto";
 import {
   AuthResponse,
   SignInResponse,
@@ -20,7 +20,7 @@ import {
   generateRefreashToken,
   verifyEmailToken,
 } from "@/utils/jwt.utils";
-import { sendVerificationEmail } from "@/utils/email.utils";
+import { sendPasswordResetEmail, sendVerificationEmail } from "@/utils/email.utils";
 
 @Service()
 export class AuthService implements IAuthService {
@@ -220,6 +220,75 @@ export class AuthService implements IAuthService {
         responseMessage.ERROR_MESSAGE,
         StatusCodes.INTERNAL_SERVER_ERROR,
       );
+    }
+    }
+    
+      async forgotPassword(data: ForgotPasswordDTO): Promise<AuthResponse>{
+    try {
+      const { email } = data;
+      const existingUser = await this._userRepository.findByEmail(email);
+      if (!existingUser) {
+        throw new AppError("User not found", StatusCodes.NOT_FOUND)
+      }
+      const resetToken = emailVerificationToken(email);
+
+      await sendPasswordResetEmail({
+        email,
+        name: existingUser.firstName + existingUser.lastName,
+        token: resetToken
+      })
+
+      return {
+        status: true,
+        message: "Password reset link sent to your email."
+      }
+
+    } catch (error) {
+      if (error instanceof AppError) {
+        throw error;
+      }
+
+      console.error("Forgot Password Error:", error);
+      throw new AppError(
+        responseMessage.ERROR_MESSAGE,
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+    }
+    
+      async resetPassword(data: ResetPaswordDTO): Promise<AuthResponse>{
+    try {
+      const { email, token, newPassword, confirmPassword } = data;
+      if (newPassword !== confirmPassword) {
+        throw new AppError("Passwords do not match.", StatusCodes.BAD_REQUEST)
+      }
+      const existingUser = this._userRepository.findByEmail(email);
+      if (!existingUser) {
+        throw new AppError("User not found. Please register again.", StatusCodes.NOT_FOUND)
+      }
+      const decodedEmail = verifyEmailToken(token);
+
+      if (decodedEmail !== email) {
+        throw new AppError("Reset link is invalid or expired. Please request a new one.", StatusCodes.UNAUTHORIZED)
+      }
+
+      const hashedPassword = await passwordHash(newPassword);
+      await this._userRepository.updatePassword(email, hashedPassword)
+      return {
+        status: true,
+        message: "Password reset successfully. You can now sign in."
+      }
+    } catch (error) {
+        if (error instanceof AppError) {
+        throw error;
+      }
+
+      console.error("Reset Password Error:", error);
+      throw new AppError(
+        responseMessage.ERROR_MESSAGE,
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    
     }
   }
 }
