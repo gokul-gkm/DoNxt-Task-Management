@@ -59,6 +59,20 @@ export class ProjectController implements IProjectController {
 
     return res.status(StatusCodes.OK).json(result);
   };
+  
+
+getProjectStats = async (req: AuthRequest, res: Response): Promise<Response> => {
+  const projectId = req.params.id as string;
+  const userId = req.user?.id;
+  if (!userId) throw new AppError("Unauthorized", StatusCodes.UNAUTHORIZED);
+
+  const result = await this._projectService.getProjectStats(
+    userId,
+    projectId
+  );
+
+  return res.status(StatusCodes.OK).json(result);
+};
 }
 
 export const projectController = Container.get(ProjectController);

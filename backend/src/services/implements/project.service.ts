@@ -6,12 +6,16 @@ import { IProjectService } from "../interfaces/project.service.interface";
 import { IProjectRepository } from "@/repositories/interfaces/project.repository.interface";
 import { AppError } from "@/utils/custom.error.utils";
 import { responseMessage } from "@/enums/responseMessage";
+import { ProjectStatsResponse } from "@/interfaces/project.interface";
+import { ITaskRepository } from "@/repositories/interfaces/task.repository.interface";
 
 @Service()
 export class ProjectService implements IProjectService {
   constructor(
     @Inject(TOKENS.ProjectRepository)
-    private _projectRepository: IProjectRepository
+    private _projectRepository: IProjectRepository,
+    @Inject(TOKENS.TaskRepository)
+    private _taskRepository: ITaskRepository
   ) {}
 
   async createProject(userId: string, data: any) {
@@ -120,4 +124,49 @@ export class ProjectService implements IProjectService {
       );
     }
   }
+  
+  async getProjectStats(
+  userId: string,
+  projectId: string
+): Promise<ProjectStatsResponse> {
+  try {
+    const project = await this._projectRepository.findById(projectId);
+
+    if (!project || project.userId.toString() !== userId) {
+      throw new AppError("Project not found", StatusCodes.NOT_FOUND);
+    }
+
+    const stats = await this._taskRepository.getProjectStats(
+      userId,
+      projectId
+    );
+
+    const pending = stats.total - stats.completed;
+    const progress =
+      stats.total === 0
+        ? 0
+        : Math.round((stats.completed / stats.total) * 100);
+
+    return {
+      status: true,
+      message: "Project stats fetched successfully",
+      data: {
+        total: stats.total,
+        completed: stats.completed,
+        pending,
+        progress,
+        isCompleted: stats.total > 0 && stats.completed === stats.total,
+      },
+    };
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+
+    console.error("Project Stats Error:", error);
+
+    throw new AppError(
+      responseMessage.ERROR_MESSAGE,
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
 }

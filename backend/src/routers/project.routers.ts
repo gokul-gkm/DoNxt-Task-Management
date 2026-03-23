@@ -28,4 +28,9 @@ projectRoute.delete(
   asyncHandler(projectController.deleteProject)
 );
 
+projectRoute.get(
+  "/:id/stats",
+  asyncHandler(projectController.getProjectStats)
+);
+
 export default projectRoute;
