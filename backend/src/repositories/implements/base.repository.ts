@@ -1,4 +1,4 @@
-import { Document, Model } from "mongoose";
+import  { Document, Model } from "mongoose";
 
 import { Service } from "typedi";
 import { IBaseRepository } from "../interfaces/base.repository.interface";
@@ -22,16 +22,16 @@ export abstract class BaseRepository< T extends Document, C = T,> implements IBa
     }
   }
 
-  async findAll(): Promise<T[]> {
-    try {
-      return await this.model.find().exec();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error(`Database Error (findAll): ${error.message}`);
-      }
-      throw new Error("Unknown error occurred in findAll");
+async findAll( filter: Record<string, any> = {}, options: any = {}): Promise<T[]> {
+  try {
+    return await this.model.find(filter, null, options).exec();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Database Error (findAll): ${error.message}`);
     }
+    throw new Error("Unknown error occurred in findAll");
   }
+}
 
   async findById(id: string): Promise<T | null> {
     try {
@@ -86,5 +86,18 @@ export abstract class BaseRepository< T extends Document, C = T,> implements IBa
       }
       throw new Error("Unknown error occurred in delete");
     }
+  }
+  
+    async findOne(filter: Record<string, any>): Promise<T | null> {
+        try {
+        return this.model.findOne(filter).exec();
+        
+      } catch (error) {
+        if (error instanceof Error) {
+        throw new Error(`Database Error (findOne): ${error.message}`);
+      }
+      throw new Error("Unknown error occurred in findOne");
+      }
+    
   }
 }

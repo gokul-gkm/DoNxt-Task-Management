@@ -55,18 +55,18 @@ export class AuthController implements IAuthController{
         return res.status(StatusCodes.OK).json(result);
     };
 
-     signIn = async (req: Request, res: Response): Promise<Response> => {
-    const result = await this._authService.signIn(req.body);
-    setCookie(res, "refresh_token", String(result.refreshToken));
+    signIn = async (req: Request, res: Response): Promise<Response> => {
+        const result = await this._authService.signIn(req.body);
+        setCookie(res, "refresh_token", String(result.refreshToken));
 
-    return res.status(StatusCodes.OK).json({
-      status: true,
-      message: result.message,
-      email: result.email,
-      userName: result.userName,
-      accessToken: result.accessToken,
-      refreshToken: result.refreshToken,
-    });
+        return res.status(StatusCodes.OK).json({
+            status: true,
+            message: result.message,
+            email: result.email,
+            userName: result.userName,
+            accessToken: result.accessToken,
+            refreshToken: result.refreshToken,
+        });
     };
     
     forgotPassword = async (req: Request, res: Response): Promise<Response> => {
@@ -86,7 +86,7 @@ export class AuthController implements IAuthController{
     resetPassword = async (req: Request, res: Response): Promise<Response> => {
         const data = req.body as ResetPaswordDTO;
         if (!data.email || !data.token || !data.newPassword || !data.confirmPassword) {
-        return res.status(StatusCodes.BAD_REQUEST).json({status: false, message: "Email, token and password fields are required"})
+            return res.status(StatusCodes.BAD_REQUEST).json({status: false, message: "Email, token and password fields are required"})
         }
         const result = await this._authService.resetPassword(data);
 
@@ -96,7 +96,7 @@ export class AuthController implements IAuthController{
     logOut = async (req: Request, res: Response): Promise<Response> => {
         const refreshToken = req.cookies.refresh_token;
         if (!refreshToken) {
-        return res.status(StatusCodes.BAD_REQUEST).json({message: "No token provided"})
+            return res.status(StatusCodes.BAD_REQUEST).json({message: "No token provided"})
         }
         res.clearCookie("refresh_token");
 
