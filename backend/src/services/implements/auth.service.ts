@@ -30,7 +30,7 @@ export class AuthService implements IAuthService {
   ) {}
   async signUp(data: SignUpDTO): Promise<SignUpResponse> {
     try {
-      const { firstName, lastName, email, phone, password, confirmPassword } =
+      const { firstName, lastName, email, password, confirmPassword } =
         data;
       if (password !== confirmPassword) {
         throw new AppError(
@@ -60,7 +60,6 @@ export class AuthService implements IAuthService {
         firstName,
         lastName,
         email,
-        phone,
         password: hashedPassword,
       } as IUser);
 

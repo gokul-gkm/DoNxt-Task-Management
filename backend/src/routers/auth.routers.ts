@@ -10,6 +10,6 @@ authRoute.post('/resend-verification', asyncHandler(authController.resendVerific
 authRoute.post('/sign-in', asyncHandler(authController.signIn))
 authRoute.post('/forgot-password', asyncHandler(authController.forgotPassword))
 authRoute.post('/reset-password', asyncHandler(authController.resetPassword))
-authRoute.post('/logout', asyncHandler(authController.logOut))
+authRoute.post('/logout', asyncHandler(authController.logOut));
 
-export default authRoute;
+export default authRoute; 
