@@ -5,7 +5,7 @@ export interface ProjectStat {
   id: string;
   name: string;
   progress: number;
-  status: "Active" | "Completed" | "Paused";
+  status: "Active" | "Completed";
   tasks: number;
 }
 
@@ -23,7 +23,6 @@ const progressColor = (p: number): string => {
 const statusBadge: Record<ProjectStat["status"], string> = {
   Active: "bg-green-50 text-green-700 border-green-100",
   Completed: "bg-indigo-50 text-indigo-600 border-indigo-100",
-  Paused: "bg-amber-50 text-amber-600 border-amber-100",
 };
 
 export const ProjectPerformanceList: FC<ProjectPerformanceListProps> = ({ projectStats }) => {

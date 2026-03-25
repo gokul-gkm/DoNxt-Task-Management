@@ -5,7 +5,7 @@ export interface ProjectData {
   _id?: string;
   name: string;
   description: string;
-  status: "Active" | "Completed" | "Paused";
+  status: "Active" | "Completed";
   progress: number;
   taskCount: number;
   dueDate: string;

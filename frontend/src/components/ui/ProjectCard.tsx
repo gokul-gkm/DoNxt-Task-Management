@@ -17,7 +17,6 @@ export interface ProjectCardProps {
 const statusConfig: Record<string, { label: string; classes: string }> = {
   Active:    { label: "Active",    classes: "bg-green-50 text-green-700 border border-green-100" },
   Completed: { label: "Completed", classes: "bg-indigo-50 text-indigo-600 border border-indigo-100" },
-  Paused:    { label: "Paused",    classes: "bg-amber-50 text-amber-600 border border-amber-100" },
 };
 
 const ProjectCard: FC<ProjectCardProps> = ({ project, cardRef, onClick, onEdit, onDelete }) => {

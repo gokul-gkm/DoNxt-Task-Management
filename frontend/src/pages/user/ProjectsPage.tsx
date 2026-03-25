@@ -24,7 +24,7 @@ const ProjectsPage: FC = () => {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
   const [search, setSearch] = useState<string>("");
-  const [filter, setFilter] = useState<"Active" | "Completed" | "Paused" | "All">("All");
+  const [filter, setFilter] = useState<"Active" | "Completed" | "All">("All");
   const [view, setView] = useState<"grid" | "list">("grid");
 
   const cardRefs = useRef<HTMLElement[]>([]);
@@ -149,7 +149,6 @@ const ProjectsPage: FC = () => {
 
   const activeCount = projects.filter((p) => p.status === "Active").length;
   const completedCount = projects.filter((p) => p.status === "Completed").length;
-  const pausedCount = projects.filter((p) => p.status === "Paused").length;
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto">
@@ -175,7 +174,6 @@ const ProjectsPage: FC = () => {
           { label: "All projects", value: projects.length, active: filter === "All", onClick: () => setFilter("All") },
           { label: "Active", value: activeCount, active: filter === "Active", onClick: () => setFilter("Active") },
           { label: "Completed", value: completedCount, active: filter === "Completed", onClick: () => setFilter("Completed") },
-          { label: "Paused", value: pausedCount, active: filter === "Paused", onClick: () => setFilter("Paused") },
         ].map(({ label, value, active, onClick }) => (
           <button
             key={label}
@@ -317,8 +315,6 @@ const ProjectsPage: FC = () => {
                       className={`text-[10px] sm:text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${
                         project.status === "Completed"
                           ? "bg-indigo-50 text-indigo-600"
-                          : project.status === "Paused"
-                          ? "bg-amber-50 text-amber-600"
                           : "bg-green-50 text-green-700"
                       }`}
                     >
