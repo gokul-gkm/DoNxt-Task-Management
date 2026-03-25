@@ -1,4 +1,4 @@
-# DoNxt - Premium Task Management System
+# DoNxt - Task Management System
 
 DoNxt is a modern, full-stack task management application designed with a premium user experience and real-time collaboration at its core. Built with a robust technical stack, it features seamless project organization, interactive dashboards, and instantaneous updates across all connected clients.
 
@@ -43,7 +43,7 @@ DoNxt is a modern, full-stack task management application designed with a premiu
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/gokul-gkm/DoNxt-Task-Management.git
    cd DoNxt
    ```
 
@@ -56,9 +56,14 @@ DoNxt is a modern, full-stack task management application designed with a premiu
      ```env
      PORT=8008
      MONGODB_URI=mongodb://localhost:27017/donxt
-     JWT_SECRET=your_jwt_secret
+     CLIENT_URL=http://localhost:3003
      EMAIL_USER=your_email@gmail.com
      EMAIL_PASS=your_app_password
+     NODE_ENV=development
+     LOG_LEVEL=debug
+     ACCESS_TOKEN_SECRET="your-access-token-secret"
+     REFRESH_TOKEN_SECRET="your-refresh-token-secret"
+     VERIFY_EMAIL_SECRET="your-verify-email-secret"
      ```
 
 3. **Frontend Setup**:
@@ -90,7 +95,7 @@ DoNxt is a modern, full-stack task management application designed with a premiu
    npm run dev
    ```
 
-3. Open your browser and navigate to `http://localhost:5173`.
+3. Open your browser and navigate to `http://localhost:3003`.
 
 ---
 
