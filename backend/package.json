@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register src/server.ts",
-    "start": "node -r tsconfig-paths/register dist/server.js",
+    "start": "TS_NODE_PROJECT=./tsconfig.json node -r tsconfig-paths/register dist/server.js",
     "build": "tsc",
     "lint": "eslint ."
   },
