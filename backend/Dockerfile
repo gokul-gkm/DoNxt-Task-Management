@@ -1,3 +1,4 @@
+
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -6,11 +7,11 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY tsconfig.json ./
-
 COPY . .
 
 RUN npm run build
+
+# ------------------------
 
 FROM node:20-alpine
 
@@ -18,13 +19,10 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --only=production
+RUN npm install --omit=dev
 
 COPY --from=builder /app/dist ./dist
 
-RUN ln -s /app/dist /app/@
-
 EXPOSE 8008
 
-# CMD ["node", "-r", "tsconfig-paths/register", "dist/server.js"]
-CMD ["npm", "start"]
+CMD ["node", "dist/server.js"]
