@@ -203,6 +203,7 @@ export class AuthService implements IAuthService {
       return {
         status: true,
         message: "Sign in successfully completed",
+        userId: existingUser._id.toString(),
         userName: existingUser.firstName + " "+ existingUser.lastName,
         email: existingUser.email,
         accessToken,

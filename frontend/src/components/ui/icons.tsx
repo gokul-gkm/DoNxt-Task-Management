@@ -253,3 +253,171 @@ export const XCircleIcon: FC<IconProps> = (props) => (
     <path d="M6 18L18 6M6 6l12 12" />
   </svg>
 );
+
+// ─── Project page & modal icons ───────────────────────────────────────────────
+
+/** Folder icon (Project Workspaces) */
+export const FolderIcon: FC<IconProps> = (props) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
+    <path
+      d="M2 5.5C2 4.4 2.9 3.5 4 3.5H7L8.5 5.5H12C13.1 5.5 14 6.4 14 7.5V12C14 13.1 13.1 14 12 14H4C2.9 14 2 13.1 2 12V5.5Z"
+      stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+  </svg>
+);
+
+/** Palette / Color Picker icon */
+export const PaletteIcon: FC<IconProps> = (props) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+  </svg>
+);
+
+/** More Horizontal icon (3 dots menu) */
+export const MoreHorizontalIcon: FC<IconProps> = (props) => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" {...props}>
+    <circle cx="7" cy="2.5" r="1.2" fill="currentColor" />
+    <circle cx="7" cy="7" r="1.2" fill="currentColor" />
+    <circle cx="7" cy="11.5" r="1.2" fill="currentColor" />
+  </svg>
+);
+
+// ─── Settings page icons ──────────────────────────────────────────────────────
+
+/** Pencil / Edit icon */
+export const EditIcon: FC<IconProps> = (props) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
+    <path d="M11.5 2.5a1.414 1.414 0 012 2L5 13H3v-2L11.5 2.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/** Save / Floppy disk icon */
+export const SaveIcon: FC<IconProps> = (props) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
+    <path d="M13 14H3a1 1 0 01-1-1V3a1 1 0 011-1h8l3 3v8a1 1 0 01-1 1z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+    <path d="M11 14v-5H5v5M5 2v4h5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/** X / Cancel icon (small) */
+export const CancelIcon: FC<IconProps> = (props) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
+    <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
+
+/** Person / Profile icon */
+export const PersonIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" {...props}>
+    <circle cx="9" cy="6" r="3" stroke="currentColor" strokeWidth="1.4" />
+    <path d="M3 16c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+  </svg>
+);
+
+/** Key icon */
+export const KeyIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" {...props}>
+    <circle cx="7" cy="8" r="4" stroke="currentColor" strokeWidth="1.4" />
+    <path d="M10 11l6 6M14 13l1.5 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+  </svg>
+);
+
+/** Shield security icon */
+export const ShieldIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" {...props}>
+    <path d="M9 2L3 5v5c0 3.5 2.5 6.3 6 7 3.5-.7 6-3.5 6-7V5L9 2z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+  </svg>
+);
+
+// ─── Dashboard page icons ──────────────────────────────────────────────────────
+
+export const DashboardGridIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" {...props}>
+    <rect x="2" y="2" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+    <rect x="10" y="2" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+    <rect x="2" y="10" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+    <rect x="10" y="10" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+  </svg>
+);
+
+export const DashboardCheckIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" {...props}>
+    <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.4" />
+    <path d="M5.5 9L7.5 11L12.5 6.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
+export const DashboardClockIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" {...props}>
+    <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.4" />
+    <path d="M9 5.5V9.5L11.5 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
+export const DashboardWarningIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" {...props}>
+    <path d="M9 2L16.5 15H1.5L9 2Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+    <path d="M9 7.5V10.5M9 12.5V13" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
+export const DashboardTrendIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" {...props}>
+    <path d="M2 14L6.5 8.5L9.5 11.5L13 6.5L16 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M2 16H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
+
+export const PlusIcon: FC<IconProps> = (props) => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" {...props}>
+    <path d="M7 1.5V12.5M1.5 7H12.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+  </svg>
+);
+
+/** Dashboard / Layout icon */
+export const LayoutDashboardIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" {...props}>
+    <rect x="1.5" y="1.5" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+    <rect x="10.5" y="1.5" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+    <rect x="1.5" y="10.5" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+    <rect x="10.5" y="10.5" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+  </svg>
+);
+
+/** Settings / Gear icon */
+export const SettingsIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" {...props}>
+    <circle cx="9" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M9 1.5V3M9 15v1.5M1.5 9H3M15 9h1.5M3.697 3.697l1.06 1.06M13.243 13.243l1.06 1.06M3.697 14.303l1.06-1.06M13.243 4.757l1.06-1.06" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
+
+/** Log out icon */
+export const LogOutIcon: FC<IconProps> = (props) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+);
+
+/** Task Header Edit icon (Amber) */
+export const TaskHeaderEditIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" {...props}>
+    <path d="M12 3.5L14.5 6M2 12V16H6L15.5 6.5C16.33 5.67 16.33 4.33 15.5 3.5C14.67 2.67 13.33 2.67 12.5 3.5L2 14V12Z" stroke="#d97706" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/** Task Header Check icon (Indigo) */
+export const TaskHeaderCheckIcon: FC<IconProps> = (props) => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" {...props}>
+    <rect x="2" y="2" width="14" height="14" rx="2" stroke="#4f46e5" strokeWidth="1.4" />
+    <path d="M5.5 9L7.5 11L12.5 6.5" stroke="#4f46e5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/** Small Close icon for modals */
+export const CloseSmallIcon: FC<IconProps> = (props) => (
+  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true" {...props}>
+    <path d="M1 1L12 12M12 1L1 12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+  </svg>
+);

@@ -35,7 +35,7 @@ const InputField: FC<InputFieldProps> = ({
 
   return (
     <div className="flex items-center gap-2.5 px-3.5 py-2.5 bg-gray-100 border border-gray-200 rounded-xl focus-within:border-blue-400 focus-within:bg-white focus-within:shadow-sm transition-all duration-200">
-      <span className="text-gray-400 flex-shrink-0">{icon}</span>
+      <span className="text-gray-400 shrink-0">{icon}</span>
       <input
         ref={ref}
         id={id}
@@ -49,7 +49,7 @@ const InputField: FC<InputFieldProps> = ({
         className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 outline-none disabled:cursor-not-allowed"
         {...rest}
       />
-      {rightSlot && <span className="flex-shrink-0">{rightSlot}</span>}
+      {rightSlot && <span className="shrink-0">{rightSlot}</span>}
     </div>
   );
 };

@@ -7,6 +7,8 @@ import { ProjectService } from "@/services/implements/project.service";
 import { ProjectRepository } from "@/repositories/implements/project.repository";
 import { TaskService } from "@/services/implements/task.service";
 import { TaskRepository } from "@/repositories/implements/task.repository";
+import { UserService } from "@/services/implements/user.service";
+import { SocketService } from "@/services/implements/socket.service";
 
 Container.set({
   id: TOKENS.AuthService,
@@ -21,6 +23,16 @@ Container.set({
 Container.set({
   id: TOKENS.TaskService,
   type: TaskService,
+});
+
+Container.set({
+  id: TOKENS.UserService,
+  type: UserService,
+});
+
+Container.set({
+  id: TOKENS.SocketService,
+  type: SocketService,
 });
 
 Container.set({

@@ -1,15 +1,19 @@
 import { createBrowserRouter, type RouteObject } from "react-router-dom";
-import SignIn from "../pages/SignInPage";
-import SignUp from "../pages/SignUpPage";
-import VerifyEmailPage from "../pages/VerifyEmailPage";
-import ForgotPasswordPage from "../pages/ForgotPasswordPage";
-import ResetPasswordPage from "../pages/ResetPasswordPage";
-import LandingPage from "../pages/LandingPage";
-import DashboardPage from "../pages/DashboardPage";
+import SignIn from "../pages/auth/SignInPage";
+import SignUp from "../pages/auth/SignUpPage";
+import VerifyEmailPage from "../pages/auth/VerifyEmailPage";
+import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "../pages/auth/ResetPasswordPage";
+import LandingPage from "../pages/common/LandingPage";
+import DashboardPage from "../pages/user/DashboardPage";
 import { ProtectedRoute } from "../hoc/ProtectedRoute";
 import { PublicRoute } from "../hoc/PublicRoute";
-
-
+import AppShell from "../components/layouts/AppShell";
+import ProjectsPage from "../pages/user/ProjectsPage";
+import ProjectDetailsPage from "../pages/user/ProjectDetailsPage";
+import SettingsPage from "../pages/user/SettingsPage";
+import NotFoundPage from "../pages/common/NotFoundPage";
+import AnalyticsPage from "../pages/user/AnalyticsPage";
 export const UserRoutes: RouteObject[] = [
   {
     path: "",
@@ -43,15 +47,23 @@ export const UserRoutes: RouteObject[] = [
     ],
   },
   {
+    path: "/",
     element: <ProtectedRoute />,
     children: [
-        { path: "dashboard", element: <DashboardPage /> },
+      {
+        element: <AppShell />,
+        children: [
+          { path: "dashboard", element: <DashboardPage /> },
+          { path: "projects", element: <ProjectsPage /> },
+          { path: "projects/:id", element: <ProjectDetailsPage /> },
+          { path: "settings", element: <SettingsPage /> },
+          { path: "analytics", element: <AnalyticsPage /> },
+        ]
+      }
     ],
   },
 
-
-  { path: "*", element: <LandingPage /> },
+  { path: "*", element: <NotFoundPage /> },
 ];
 
 export const router = createBrowserRouter(UserRoutes);
-

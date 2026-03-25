@@ -2,13 +2,13 @@ import { type FC, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import LandingNavbar from "../components/ui/LandingNavbar";
-import MiniDashboard from "../components/ui/MiniDashboard";
-import FloatingBadge from "../components/ui/FloatingBadge";
-import FeatureCard from "../components/ui/FeatureCard";
-import TestimonialCard from "../components/ui/TestimonialCard";
-import AnimatedStat from "../components/ui/AnimatedStat";
-import { ArrowRightIcon, PlayCircleIcon } from "../components/ui/icons";
+import LandingNavbar from "../../components/ui/LandingNavbar";
+import MiniDashboard from "../../components/ui/MiniDashboard";
+import FloatingBadge from "../../components/ui/FloatingBadge";
+import FeatureCard from "../../components/ui/FeatureCard";
+import TestimonialCard from "../../components/ui/TestimonialCard";
+import AnimatedStat from "../../components/ui/AnimatedStat";
+import { ArrowRightIcon, PlayCircleIcon } from "../../components/ui/icons";
 
 import {
   features,
@@ -16,7 +16,7 @@ import {
   testimonials,
   steps,
   footerColumns,
-} from "../data/landingData";
+} from "../../data/landingData";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,16 +56,11 @@ const LandingPage: FC = () => {
     <div className="bg-slate-50 text-gray-900 overflow-x-hidden">
       <LandingNavbar />
 
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          HERO
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <section className="relative min-h-screen flex flex-col items-center justify-center text-center pt-32 pb-24 px-4 sm:px-6 overflow-hidden">
-        {/* Background blobs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[-10%] left-[5%] w-[480px] h-[480px] rounded-full bg-blue-100/70 blur-[120px]" />
-          <div className="absolute top-[30%] right-[-5%] w-[360px] h-[360px] rounded-full bg-indigo-100/60 blur-[100px]" />
-          <div className="absolute bottom-[5%] left-[30%] w-[300px] h-[300px] rounded-full bg-sky-100/50 blur-[90px]" />
-          {/* Dot grid */}
+          <div className="absolute top-[-10%] left-[5%] w-120 h-120 rounded-full bg-blue-100/70 blur-[120px]" />
+          <div className="absolute top-[30%] right-[-5%] w-90 h-90 rounded-full bg-indigo-100/60 blur-[100px]" />
+          <div className="absolute bottom-[5%] left-[30%] w-75 h-75 rounded-full bg-sky-100/50 blur-[90px]" />
           <div
             className="absolute inset-0 opacity-[0.30]"
             style={{
@@ -75,17 +70,15 @@ const LandingPage: FC = () => {
           />
         </div>
 
-        {/* Badge */}
         <div ref={heroBadgeRef} className="opacity-0 inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-1.5 mb-8">
           <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
           <span className="text-xs font-bold text-blue-600 tracking-wide">NOW IN PUBLIC BETA — FREE TO USE</span>
         </div>
 
-        {/* Headline */}
         <div ref={heroTextRef} className="opacity-0 max-w-4xl">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[0.95] tracking-tight mb-6">
             <span className="block text-gray-900">Work moves</span>
-            <span className="block bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600 bg-clip-text text-transparent">
+            <span className="block bg-linear-to-r from-blue-500 via-indigo-500 to-blue-600 bg-clip-text text-transparent">
               at your speed.
             </span>
           </h1>
@@ -95,7 +88,6 @@ const LandingPage: FC = () => {
           </p>
         </div>
 
-        {/* CTAs */}
         <div ref={heroCTARef} className="opacity-0 flex flex-col sm:flex-row items-center gap-4 mt-10">
           <a
             href="/auth/sign-up"
@@ -110,7 +102,6 @@ const LandingPage: FC = () => {
           </a>
         </div>
 
-        {/* Social proof */}
         <div className="flex items-center gap-4 mt-9 opacity-60">
           <div className="flex -space-x-2">
             {[1, 2, 3, 4, 5].map((i) => (
@@ -122,13 +113,11 @@ const LandingPage: FC = () => {
           </p>
         </div>
 
-        {/* Hero dashboard preview */}
         <div ref={heroBoardRef} className="opacity-0 w-full max-w-2xl mt-20 relative">
-          <FloatingBadge label="Design screens done ✓" sub="Just completed" color="bg-emerald-400" delay={0} className="top-[-28px] left-[-10px] sm:left-[-50px] z-10" />
-          <FloatingBadge label="API docs · 2h 14m left" sub="High priority" color="bg-rose-400" delay={0.7} className="top-[30%] right-[-10px] sm:right-[-60px] z-10" />
-          <FloatingBadge label="Sprint velocity +40%" sub="This week" color="bg-blue-400" delay={1.2} className="bottom-[-24px] left-[10%] z-10" />
+          <FloatingBadge label="Design screens done ✓" sub="Just completed" color="bg-emerald-400" delay={0} className="-top-7 -left-2.5 sm:-left-12.5 z-10" />
+          <FloatingBadge label="API docs · 2h 14m left" sub="High priority" color="bg-rose-400" delay={0.7} className="top-[30%] -right-2.5 sm:-right-15 z-10" />
+          <FloatingBadge label="Sprint velocity +40%" sub="This week" color="bg-blue-400" delay={1.2} className="-bottom-6 left-[10%] z-10" />
 
-          {/* Browser chrome */}
           <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl shadow-slate-200/70 p-4">
             <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-100">
               <div className="flex gap-1.5">
@@ -143,7 +132,6 @@ const LandingPage: FC = () => {
             <MiniDashboard />
           </div>
 
-          {/* Bottom glow */}
           <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-2/3 h-20 bg-blue-200/40 blur-3xl rounded-full pointer-events-none" />
         </div>
       </section>
@@ -151,7 +139,7 @@ const LandingPage: FC = () => {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           STATS STRIP
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="border-y border-slate-200/80 bg-gradient-to-b from-white to-slate-50 py-16 px-4">
+      <section className="border-y border-slate-200/80 bg-linear-to-b from-white to-slate-50 py-16 px-4">
         <div className="max-w-5xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-10">
           {stats.map((s) => <AnimatedStat key={s.label} value={s.value} label={s.label} />)}
         </div>
@@ -167,7 +155,7 @@ const LandingPage: FC = () => {
           </div>
           <h2 className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight mb-4">
             Everything you need.<br />
-            <span className="bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">Nothing you don't.</span>
+            <span className="bg-linear-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">Nothing you don't.</span>
           </h2>
           <p className="text-gray-500 text-lg max-w-xl mx-auto">
             Carefully crafted for teams that move fast, think clearly, and ship with confidence.
@@ -195,7 +183,7 @@ const LandingPage: FC = () => {
               <div className="flex flex-col gap-6">
                 {steps.map(({ step, title, desc, color }) => (
                   <div key={step} className="flex items-start gap-4">
-                    <div className={`w-10 h-10 rounded-xl ${color} shadow-lg flex items-center justify-center text-xs font-black text-white flex-shrink-0`}>
+                    <div className={`w-10 h-10 rounded-xl ${color} shadow-lg flex items-center justify-center text-xs font-black text-white shrink-0`}>
                       {step}
                     </div>
                     <div>
@@ -240,7 +228,7 @@ const LandingPage: FC = () => {
                     { name: "Write unit tests", done: false, priority: "Low", time: "1d 6h" },
                   ].map(({ name, done, priority, time }) => (
                     <div key={name} className={`flex items-center gap-3 px-3.5 py-3 rounded-xl border ${done ? "bg-white border-slate-100" : "bg-white border-slate-200"}`}>
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${done ? "bg-emerald-500 border-emerald-500" : "border-gray-300"}`}>
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${done ? "bg-emerald-500 border-emerald-500" : "border-gray-300"}`}>
                         {done && <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                       </div>
                       <p className={`text-xs font-medium flex-1 leading-tight ${done ? "line-through text-gray-400" : "text-gray-700"}`}>{name}</p>
@@ -267,7 +255,7 @@ const LandingPage: FC = () => {
                     <span className="text-gray-700 font-bold">50%</span>
                   </div>
                   <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" style={{ width: "50%" }} />
+                    <div className="h-full bg-linear-to-r from-blue-500 to-indigo-500 rounded-full" style={{ width: "50%" }} />
                   </div>
                 </div>
               </div>
@@ -299,7 +287,7 @@ const LandingPage: FC = () => {
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <section className="py-28 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-3xl px-8 sm:px-16 py-16 text-center shadow-2xl shadow-blue-200 overflow-hidden">
+          <div className="relative bg-linear-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-3xl px-8 sm:px-16 py-16 text-center shadow-2xl shadow-blue-200 overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-300/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
             <div className="absolute inset-0 opacity-[0.12]" style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
@@ -332,7 +320,6 @@ const LandingPage: FC = () => {
       <footer className="border-t border-slate-200 bg-slate-50 px-4 sm:px-6 py-14">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-10 mb-12">
-            {/* Brand */}
             <div className="col-span-2 sm:col-span-4 lg:col-span-2">
               <div className="flex items-center gap-2.5 mb-4">
                 <div className="w-8 h-8 bg-blue-500 rounded-xl flex items-center justify-center shadow-md shadow-blue-200">

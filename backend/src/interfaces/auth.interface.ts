@@ -9,6 +9,7 @@ export interface SignUpResponse extends AuthResponse {
 }
 
 export interface SignInResponse extends SignUpResponse {
+  userId?: string;
   userName?: string;
   accessToken?: string;
   refreshToken?: string;

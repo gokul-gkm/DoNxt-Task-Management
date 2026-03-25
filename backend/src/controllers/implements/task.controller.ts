@@ -17,6 +17,7 @@ export class TaskController implements ITaskController {
 
   createTask = async (req: AuthRequest, res: Response): Promise<Response> => {
     const userId = req.user?.id;
+    console.log(`[TaskController] createTask triggered by userId: ${userId}`);
     if (!userId) throw new AppError("Unauthorized", StatusCodes.UNAUTHORIZED);
     const result = await this._taskService.createTask(
       userId,
@@ -58,6 +59,16 @@ export class TaskController implements ITaskController {
       userId,
       taskId
     );
+
+    return res.status(StatusCodes.OK).json(result);
+  };
+
+  getAnalytics = async (req: AuthRequest, res: Response): Promise<Response> => {
+    const userId = req.user?.id;
+    const days = parseInt(req.query.days as string) || 7;
+    if (!userId) throw new AppError("Unauthorized", StatusCodes.UNAUTHORIZED);
+    
+    const result = await this._taskService.getAnalytics(userId, days);
 
     return res.status(StatusCodes.OK).json(result);
   };

@@ -3,13 +3,13 @@ import { gsap } from "gsap";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { authService } from "../services/api/auth.api";
+import { authService } from "../../services/api/auth.api";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { resetSchema, type ResetSchemaType } from "../lib/validations/auth.z.validation";
-import InputField from "../components/ui/InputField";
-import Logo from "../components/ui/Logo";
-import { EmailIcon, LockIcon, EyeIcon, EyeOffIcon, SpinnerIcon, ShieldCheckIcon, WarningIcon } from "../components/ui/icons";
-import AuthHeroPanel, { type AuthStep } from "../components/ui/AuthHeroPanel";
+import { resetSchema, type ResetSchemaType } from "../../lib/validations/auth.z.validation";
+import InputField from "../../components/ui/InputField";
+import Logo from "../../components/ui/Logo";
+import { EmailIcon, LockIcon, EyeIcon, EyeOffIcon, SpinnerIcon, ShieldCheckIcon, WarningIcon } from "../../components/ui/icons";
+import AuthHeroPanel, { type AuthStep } from "../../components/ui/AuthHeroPanel";
 
 const validSteps: AuthStep[] = [
   { step: "1", label: "Requested a reset link", done: true,  active: false },
@@ -83,14 +83,12 @@ const ResetPasswordPage: FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-3 sm:p-5 lg:p-8">
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[480px]">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-120">
 
-        {/* ── LEFT — Form ──────────────────────────────────────────── */}
         <div
           ref={leftRef}
           className="w-full lg:w-[48%] flex flex-col px-6 sm:px-10 pt-8 pb-8 lg:pt-12 lg:pb-12"
         >
-          {/* Logo */}
           <div ref={logoRef} className="mb-8">
             <Logo size="md" />
           </div>
@@ -237,7 +235,6 @@ const ResetPasswordPage: FC = () => {
           </div>
         </div>
 
-        {/* ── RIGHT — Shared hero panel ──────────────────────────────── */}
         <AuthHeroPanel
           panelRef={rightRef}
           heading={invalidLink ? "Link expired?" : "Almost done!"}

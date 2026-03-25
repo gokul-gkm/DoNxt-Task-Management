@@ -8,6 +8,7 @@ const taskRoute = Router();
 
 taskRoute.use(authMiddleware);
 
+taskRoute.get("/analytics", asyncHandler(taskController.getAnalytics));
 taskRoute.post("/", asyncHandler(taskController.createTask));
 taskRoute.get("/", asyncHandler(taskController.getTasks));
 taskRoute.patch("/:id", asyncHandler(taskController.updateTask));

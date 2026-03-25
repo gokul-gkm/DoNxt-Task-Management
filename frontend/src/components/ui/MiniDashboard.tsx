@@ -48,7 +48,7 @@ const MiniDashboard: FC = () => (
             done ? "bg-slate-50 border-slate-100" : "bg-white border-slate-200/80"
           }`}
         >
-          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${done ? "bg-emerald-500 border-emerald-500" : "border-gray-300"}`}>
+          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${done ? "bg-emerald-500 border-emerald-500" : "border-gray-300"}`}>
             {done && (
               <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
                 <path d="M1.5 4.5l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

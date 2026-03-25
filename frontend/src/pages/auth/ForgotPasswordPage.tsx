@@ -3,22 +3,20 @@ import { gsap } from "gsap";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { authService } from "../services/api/auth.api";
+import { authService } from "../../services/api/auth.api";
 import { Link } from "react-router-dom";
-import { forgotSchema, type ForgotSchemaType } from "../lib/validations/auth.z.validation";
-import InputField from "../components/ui/InputField";
-import Logo from "../components/ui/Logo";
-import { EmailIcon, LockKeyIcon, SpinnerIcon } from "../components/ui/icons";
-import AuthHeroPanel, { type AuthStep } from "../components/ui/AuthHeroPanel";
+import { forgotSchema, type ForgotSchemaType } from "../../lib/validations/auth.z.validation";
+import InputField from "../../components/ui/InputField";
+import Logo from "../../components/ui/Logo";
+import { EmailIcon, LockKeyIcon, SpinnerIcon } from "../../components/ui/icons";
+import AuthHeroPanel, { type AuthStep } from "../../components/ui/AuthHeroPanel";
 
-// ─── Step data ─────────────────────────────────────────────────────────────────
 const steps: AuthStep[] = [
   { step: "1", label: "Enter your email address", active: true  },
   { step: "2", label: "Check your inbox for the link", active: false },
   { step: "3", label: "Set your new password", active: false },
 ];
 
-// ─── Main component ───────────────────────────────────────────────────────────
 const ForgotPasswordPage: FC = () => {
   const {
     register,
@@ -29,7 +27,6 @@ const ForgotPasswordPage: FC = () => {
     mode: "onChange",
   });
 
-  // ── Refs for GSAP ──────────────────────────────────────────────────────
   const leftRef      = useRef<HTMLDivElement>(null);
   const rightRef     = useRef<HTMLDivElement>(null);
   const logoRef      = useRef<HTMLDivElement>(null);
@@ -42,7 +39,6 @@ const ForgotPasswordPage: FC = () => {
     if (el && !formItemsRef.current.includes(el)) formItemsRef.current.push(el);
   };
 
-  // ── Page-load animation ────────────────────────────────────────────────
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
     tl.fromTo(leftRef.current,      { opacity: 0, x: -32 }, { opacity: 1, x: 0, duration: 0.7 });
@@ -53,13 +49,11 @@ const ForgotPasswordPage: FC = () => {
     tl.fromTo(formItemsRef.current, { opacity: 0, y: 14  }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.07 }, "-=0.25");
   }, []);
 
-  // ── Button hover ───────────────────────────────────────────────────────
   const handleBtnEnter = () =>
     gsap.to(submitBtnRef.current, { scale: 1.02, duration: 0.15, ease: "power1.out" });
   const handleBtnLeave = () =>
     gsap.to(submitBtnRef.current, { scale: 1, duration: 0.15, ease: "power1.out" });
 
-  // ── Submit ─────────────────────────────────────────────────────────────
   const onSubmit = async (data: ForgotSchemaType) => {
     try {
       const res = await authService.forgotPassword(data.email);
@@ -71,26 +65,22 @@ const ForgotPasswordPage: FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-3 sm:p-5 lg:p-8">
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[480px]">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-120">
 
-        {/* ── LEFT — Form ──────────────────────────────────────────── */}
         <div
           ref={leftRef}
           className="w-full lg:w-[48%] flex flex-col px-6 sm:px-10 pt-8 pb-8 lg:pt-12 lg:pb-12"
         >
-          {/* Logo */}
           <div ref={logoRef} className="mb-8">
             <Logo size="md" />
           </div>
 
-          {/* Icon */}
           <div ref={iconRef} className="mb-5">
             <div className="w-14 h-14 rounded-2xl bg-blue-500 shadow-md shadow-blue-200 flex items-center justify-center">
               <LockKeyIcon />
             </div>
           </div>
 
-          {/* Heading */}
           <div ref={headingRef} className="mb-6">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight mb-1.5">
               Forgot Password?
@@ -100,10 +90,8 @@ const ForgotPasswordPage: FC = () => {
             </p>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3.5" noValidate>
 
-            {/* Email */}
             <div ref={reg} className="flex flex-col gap-1">
               <label htmlFor="email" className="text-xs font-semibold text-gray-700">
                 Email address
@@ -124,7 +112,6 @@ const ForgotPasswordPage: FC = () => {
               )}
             </div>
 
-            {/* Submit */}
             <div ref={reg}>
               <button
                 ref={submitBtnRef}
@@ -147,7 +134,6 @@ const ForgotPasswordPage: FC = () => {
             </div>
           </form>
 
-          {/* Footer */}
           <div ref={reg} className="mt-6 pt-5 border-t border-gray-100 text-center text-sm text-gray-500">
             Remembered your password?{" "}
             <Link to="/auth/sign-in" className="text-blue-500 hover:text-blue-600 font-bold transition-colors duration-150">
@@ -156,7 +142,6 @@ const ForgotPasswordPage: FC = () => {
           </div>
         </div>
 
-        {/* ── RIGHT — Shared hero panel ──────────────────────────────── */}
         <AuthHeroPanel
           panelRef={rightRef}
           heading="Recover your access."

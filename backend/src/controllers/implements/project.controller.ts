@@ -35,6 +35,17 @@ export class ProjectController implements IProjectController {
     return res.status(StatusCodes.OK).json(result);
   };
 
+  getProjectById = async (req: AuthRequest, res: Response): Promise<Response> => {
+    console.log("in backend project controller");
+    const userId = req.user?.id;
+    const projectId = req.params.id as string;
+    
+    if (!userId) throw new AppError("Unauthorized", StatusCodes.UNAUTHORIZED);
+    
+    const result = await this._projectService.getProjectById(userId, projectId);
+    return res.status(StatusCodes.OK).json(result);
+  };
+
   updateProject = async (req: AuthRequest, res: Response): Promise<Response> => {
     const userId = req.user?.id;
     const projectId = req.params.id as string;

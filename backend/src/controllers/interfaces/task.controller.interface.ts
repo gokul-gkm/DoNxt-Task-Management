@@ -6,4 +6,5 @@ export interface ITaskController {
   getTasks(req: AuthRequest, res: Response): Promise<Response>;
   updateTask(req: AuthRequest, res: Response): Promise<Response>;
   deleteTask(req: AuthRequest, res: Response): Promise<Response>;
+  getAnalytics(req: AuthRequest, res: Response): Promise<Response>;
 }

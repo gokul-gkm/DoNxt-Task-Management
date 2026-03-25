@@ -29,7 +29,7 @@ const AuthHeroPanel: FC<AuthHeroPanelProps> = ({
   <>
     <div
       ref={panelRef}
-      className="hidden lg:flex w-[52%] bg-gradient-to-br from-blue-50 to-indigo-50 flex-col items-center justify-center px-10 py-10 border-l border-gray-100"
+      className="hidden lg:flex w-[52%] bg-linear-to-br from-blue-50 to-indigo-50 flex-col items-center justify-center px-10 py-10 border-l border-gray-100"
     >
       <div className="text-center mb-8">
         <h2 className="text-xl font-extrabold text-gray-900 leading-tight mb-1.5">{heading}</h2>
@@ -67,7 +67,7 @@ const AuthHeroPanel: FC<AuthHeroPanelProps> = ({
       </div>
     </div>
 
-    <div className="lg:hidden bg-gradient-to-br from-blue-50 to-indigo-50 px-6 py-6 flex flex-col items-center text-center border-t border-gray-100">
+    <div className="lg:hidden bg-linear-to-br from-blue-50 to-indigo-50 px-6 py-6 flex flex-col items-center text-center border-t border-gray-100">
       {mobileHeading && (
         <h2 className="text-lg font-extrabold text-gray-900 mb-1">{mobileHeading}</h2>
       )}

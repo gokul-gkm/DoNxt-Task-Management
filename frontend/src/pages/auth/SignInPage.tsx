@@ -4,23 +4,23 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
-import { signUpSchema, type SignupSchemaType } from "../lib/validations/auth.z.validation";
-import { authService } from "../services/api/auth.api";
-import InputField from "../components/ui/InputField";
-import Logo from "../components/ui/Logo";
-import { UserIcon, EmailIcon, LockIcon, EyeIcon, EyeOffIcon, SpinnerIcon } from "../components/ui/icons";
+import { signInSchema, type SigninSchemaType } from "../../lib/validations/auth.z.validation";
+import { authService } from "../../services/api/auth.api";
+import InputField from "../../components/ui/InputField";
+import Logo from "../../components/ui/Logo";
+import { EmailIcon, LockIcon, EyeIcon, EyeOffIcon, SpinnerIcon } from "../../components/ui/icons";
+import { useAuthStore } from "../../store/auth.store";
 
-const SignUp: FC = () => {
+const SignIn: FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm,  setShowConfirm]  = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignupSchemaType>({
-    resolver: zodResolver(signUpSchema),
+  } = useForm<SigninSchemaType>({
+    resolver: zodResolver(signInSchema),
     mode: "onChange",
   });
 
@@ -29,7 +29,7 @@ const SignUp: FC = () => {
   const logoRef      = useRef<HTMLDivElement>(null);
   const headingRef   = useRef<HTMLDivElement>(null);
   const formItemsRef = useRef<HTMLElement[]>([]);
-  const submitBtnRef = useRef<HTMLButtonElement>(null);
+  const loginBtnRef  = useRef<HTMLButtonElement>(null);
 
   const reg = (el: HTMLElement | null) => {
     if (el && !formItemsRef.current.includes(el)) formItemsRef.current.push(el);
@@ -45,25 +45,32 @@ const SignUp: FC = () => {
   }, []);
 
   const handleBtnEnter = () =>
-    gsap.to(submitBtnRef.current, { scale: 1.02, duration: 0.15, ease: "power1.out" });
+    gsap.to(loginBtnRef.current, { scale: 1.02, duration: 0.15, ease: "power1.out" });
   const handleBtnLeave = () =>
-    gsap.to(submitBtnRef.current, { scale: 1,    duration: 0.15, ease: "power1.out" });
+    gsap.to(loginBtnRef.current, { scale: 1,    duration: 0.15, ease: "power1.out" });
 
-  const onSubmit = async (data: SignupSchemaType) => {
+  const onSubmit = async (data: SigninSchemaType) => {
     try {
-      await authService.signup(data);
-      toast.success("Account created! Please verify your email.");
-      navigate("/auth/sign-in", { replace: true });
+      const res = await authService.signin(data);
+      localStorage.setItem("access-token", res.accessToken);
+    
+      useAuthStore.getState().login({
+        userId: res.userId,
+        userName: res.userName,
+        email: res.email,
+        token: res.accessToken
+      });
+      toast.success(res.message || "Login successful!");
+      navigate("/dashboard", { replace: true });
     } catch (err: any) {
-      toast.error(err.message || "Sign up failed. Please try again.");
+      toast.error(err.message || "Invalid credentials");
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-3 sm:p-5 lg:p-8">
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[480px]">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-120">
 
-        {/* ── LEFT — Form ──────────────────────────────────────────── */}
         <div
           ref={leftRef}
           className="w-full lg:w-[48%] flex flex-col px-6 sm:px-10 pt-8 pb-8 lg:pt-12 lg:pb-12"
@@ -74,55 +81,14 @@ const SignUp: FC = () => {
 
           <div ref={headingRef} className="mb-6">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight mb-1.5">
-              Create Your Account
+              Welcome Back!
             </h1>
-            <p className="text-sm text-gray-500">Get started for free</p>
+            <p className="text-sm text-gray-500">Log in to your account</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3.5" noValidate>
 
-            <div ref={reg} className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              <div className="flex flex-col gap-1">
-                <label htmlFor="firstName" className="text-xs font-semibold text-gray-700">
-                  First Name
-                </label>
-                <InputField
-                  id="firstName"
-                  type="text"
-                  placeholder="John"
-                  autoFocus
-                  autoComplete="given-name"
-                  icon={<UserIcon />}
-                  {...register("firstName")}
-                />
-                {errors.firstName && (
-                  <p className="text-xs text-red-500 mt-0.5 font-medium" role="alert">
-                    {errors.firstName.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label htmlFor="lastName" className="text-xs font-semibold text-gray-700">
-                  Last Name
-                </label>
-                <InputField
-                  id="lastName"
-                  type="text"
-                  placeholder="Doe"
-                  autoComplete="family-name"
-                  icon={<UserIcon />}
-                  {...register("lastName")}
-                />
-                {errors.lastName && (
-                  <p className="text-xs text-red-500 mt-0.5 font-medium" role="alert">
-                    {errors.lastName.message}
-                  </p>
-                )}
-              </div>
-            </div>
-
-=            <div ref={reg} className="flex flex-col gap-1">
+            <div ref={reg} className="flex flex-col gap-1">
               <label htmlFor="email" className="text-xs font-semibold text-gray-700">
                 Email
               </label>
@@ -130,6 +96,7 @@ const SignUp: FC = () => {
                 id="email"
                 type="email"
                 placeholder="name@example.com"
+                autoFocus
                 autoComplete="email"
                 icon={<EmailIcon />}
                 {...register("email")}
@@ -141,15 +108,15 @@ const SignUp: FC = () => {
               )}
             </div>
 
-=            <div ref={reg} className="flex flex-col gap-1">
+            <div ref={reg} className="flex flex-col gap-1">
               <label htmlFor="password" className="text-xs font-semibold text-gray-700">
                 Password
               </label>
               <InputField
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="At least 8 characters"
-                autoComplete="new-password"
+                placeholder="••••••••"
+                autoComplete="current-password"
                 icon={<LockIcon />}
                 rightSlot={
                   <button
@@ -168,41 +135,19 @@ const SignUp: FC = () => {
                   {errors.password.message}
                 </p>
               )}
+              <div className="flex justify-end mt-0.5">
+                <Link
+                  to="/auth/forgot-password"
+                  className="text-xs text-blue-500 hover:text-blue-600 font-medium transition-colors duration-150"
+                >
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
-            <div ref={reg} className="flex flex-col gap-1">
-              <label htmlFor="confirmPassword" className="text-xs font-semibold text-gray-700">
-                Confirm Password
-              </label>
-              <InputField
-                id="confirmPassword"
-                type={showConfirm ? "text" : "password"}
-                placeholder="Repeat your password"
-                autoComplete="new-password"
-                icon={<LockIcon />}
-                rightSlot={
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirm((s) => !s)}
-                    className="text-blue-500 cursor-pointer"
-                    aria-label={showConfirm ? "Hide password" : "Show password"}
-                  >
-                    {showConfirm ? <EyeOffIcon /> : <EyeIcon />}
-                  </button>
-                }
-                {...register("confirmPassword")}
-              />
-              {errors.confirmPassword && (
-                <p className="text-xs text-red-500 mt-0.5 font-medium" role="alert">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
-            </div>
-
-            {/* Submit */}
             <div ref={reg}>
               <button
-                ref={submitBtnRef}
+                ref={loginBtnRef}
                 type="submit"
                 disabled={isSubmitting}
                 onMouseEnter={handleBtnEnter}
@@ -213,27 +158,26 @@ const SignUp: FC = () => {
                 {isSubmitting ? (
                   <span className="flex items-center justify-center gap-2">
                     <SpinnerIcon className="w-4 h-4" />
-                    Creating account…
+                    Logging in…
                   </span>
                 ) : (
-                  "Sign Up"
+                  "Log In"
                 )}
               </button>
             </div>
           </form>
 
           <div ref={reg} className="mt-6 pt-5 border-t border-gray-100 text-center text-sm text-gray-500">
-            Already have an account?{" "}
-            <Link to="/auth/sign-in" className="text-blue-500 hover:text-blue-600 font-bold transition-colors duration-150">
-              Log In
+            Don't have an account?{" "}
+            <Link to="/auth/sign-up" className="text-blue-500 hover:text-blue-600 font-bold transition-colors duration-150">
+              Sign Up
             </Link>
           </div>
         </div>
 
-        {/* ── RIGHT — Hero image  ─────────────────────────── */}
         <div
           ref={rightRef}
-          className="hidden lg:flex w-[52%] bg-gradient-to-br from-blue-50 to-indigo-50 flex-col items-center justify-center px-10 py-10 border-l border-gray-100"
+          className="hidden lg:flex w-[52%] bg-linear-to-br from-blue-50 to-indigo-50 flex-col items-center justify-center px-10 py-10 border-l border-gray-100"
         >
           <div className="text-center mb-6">
             <h2 className="text-xl font-extrabold text-gray-900 leading-tight mb-1.5">
@@ -250,7 +194,7 @@ const SignUp: FC = () => {
           />
         </div>
 
-        <div className="lg:hidden bg-gradient-to-br from-blue-50 to-indigo-50 px-6 py-6 flex flex-col items-center text-center border-t border-gray-100">
+        <div className="lg:hidden bg-linear-to-br from-blue-50 to-indigo-50 px-6 py-6 flex flex-col items-center text-center border-t border-gray-100">
           <h2 className="text-lg font-extrabold text-gray-900 mb-1">Boost your productivity.</h2>
           <p className="text-xs text-gray-500 mb-4">
             Organize your <span className="font-semibold text-gray-700">tasks</span> efficiently.
@@ -258,7 +202,7 @@ const SignUp: FC = () => {
           <img
             src="/login-hero.png"
             alt="Person working at a desk with task management UI"
-            className="w-full max-w-[220px] sm:max-w-xs object-contain drop-shadow-md"
+            className="w-full max-w-55 sm:max-w-xs object-contain drop-shadow-md"
           />
         </div>
       </div>
@@ -266,4 +210,4 @@ const SignUp: FC = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;

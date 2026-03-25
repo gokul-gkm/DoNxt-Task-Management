@@ -8,6 +8,7 @@ import { AppError } from "@/utils/custom.error.utils";
 import { responseMessage } from "@/enums/responseMessage";
 import { ProjectStatsResponse } from "@/interfaces/project.interface";
 import { ITaskRepository } from "@/repositories/interfaces/task.repository.interface";
+import { ISocketService } from "../interfaces/socket.service.interface";
 
 @Service()
 export class ProjectService implements IProjectService {
@@ -15,7 +16,9 @@ export class ProjectService implements IProjectService {
     @Inject(TOKENS.ProjectRepository)
     private _projectRepository: IProjectRepository,
     @Inject(TOKENS.TaskRepository)
-    private _taskRepository: ITaskRepository
+    private _projectTaskRepository: ITaskRepository,
+    @Inject(TOKENS.SocketService)
+    private _socketService: ISocketService
   ) {}
 
   async createProject(userId: string, data: any) {
@@ -28,6 +31,9 @@ export class ProjectService implements IProjectService {
         ...data,
         userId,
       });
+
+      console.log(`[ProjectService] Project created: ${project._id}. Emitting to user:${userId}`);
+      this._socketService.emitToUser(userId.toString(), "project:created", project);
 
       return {
         status: true,
@@ -48,10 +54,7 @@ export class ProjectService implements IProjectService {
 
   async getProjects(userId: string) {
     try {
-      const projects = await this._projectRepository.findAll({
-        userId,
-        is_archived: false,
-      });
+      const projects = await this._projectRepository.findAllWithStats(userId);
 
       return {
         status: true,
@@ -70,6 +73,34 @@ export class ProjectService implements IProjectService {
     }
   }
 
+  async getProjectById(userId: string, projectId: string) {
+    try {
+      const project = await this._projectRepository.findById(projectId);
+
+      if (!project || project.userId.toString() !== userId) {
+        throw new AppError("Project not found", StatusCodes.BAD_REQUEST);
+      }
+
+      return {
+        status: true,
+        message: "Project fetched successfully",
+        data: project,
+      };
+    } catch (error) {
+      if (error instanceof AppError) {
+        console.error("[ProjectService.getProjectById] AppError thrown:", error.message);
+        throw error;
+      }
+
+      console.error("[ProjectService.getProjectById] Unexpected Error:", error);
+
+      throw new AppError(
+        responseMessage.ERROR_MESSAGE,
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   async updateProject(userId: string, projectId: string, data: any) {
     try {
       const project = await this._projectRepository.findById(projectId);
@@ -79,6 +110,11 @@ export class ProjectService implements IProjectService {
       }
 
       const updatedProject = await this._projectRepository.update(projectId, data);
+
+      if (updatedProject) {
+        console.log(`[ProjectService] Project updated: ${projectId}. Emitting to user:${userId}`);
+        this._socketService.emitToUser(userId.toString(), "project:updated", updatedProject);
+      }
 
       return {
         status: true,
@@ -109,6 +145,9 @@ export class ProjectService implements IProjectService {
         is_archived: true,
       });
 
+      console.log(`[ProjectService] Project deleted: ${projectId}. Emitting to user:${userId}`);
+      this._socketService.emitToUser(userId.toString(), "project:deleted", { projectId });
+
       return {
         status: true,
         message: "Project deleted successfully",
@@ -136,7 +175,7 @@ export class ProjectService implements IProjectService {
       throw new AppError("Project not found", StatusCodes.NOT_FOUND);
     }
 
-    const stats = await this._taskRepository.getProjectStats(
+    const stats = await this._projectTaskRepository.getProjectStats(
       userId,
       projectId
     );

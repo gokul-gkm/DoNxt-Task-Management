@@ -8,6 +8,11 @@ const projectRoute = Router();
 
 projectRoute.use(authMiddleware);
 
+projectRoute.get(
+  "/:id",
+  asyncHandler(projectController.getProjectById)
+);
+
 projectRoute.post(
   "/",
   asyncHandler(projectController.createProject)
