@@ -17,6 +17,7 @@ export const useSocket = () => useContext(SocketContext);
 interface SocketProviderProps {
   children: ReactNode;
 }
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const { userId, isAuthenticated } = useAuthStore();
@@ -28,7 +29,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     
     if (isAuthenticated && userId) {
       console.log('[SocketContext] Attempting to connect to socket server at http://localhost:8008');
-      const newSocket = io('http://localhost:8008', {
+      const newSocket = io(SOCKET_URL, {
         query: { userId },
       });
 
