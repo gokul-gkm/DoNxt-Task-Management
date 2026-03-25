@@ -24,4 +24,4 @@ RUN ln -s /app/dist /app/@
 
 EXPOSE 8008
 
-CMD ["node", "-r", "module-alias/register", "dist/server.js"]
+CMD ["node", "-r", "tsconfig-paths/register", "dist/server.js"]
