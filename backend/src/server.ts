@@ -16,7 +16,10 @@ const startServer = async () => {
     socketService.initialize(server);
 
     const PORT = env.PORT || 8008;
-    server.listen(PORT, () => {
+    server.listen({
+        port: Number(PORT),
+        host: "0.0.0.0",
+    }, () => {
         console.log(`Server running on port ${PORT}`);
     });
 }
