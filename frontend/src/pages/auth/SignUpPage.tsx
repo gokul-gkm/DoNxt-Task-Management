@@ -121,7 +121,7 @@ const SignUp: FC = () => {
               </div>
             </div>
 
-=            <div ref={reg} className="flex flex-col gap-1">
+            <div ref={reg} className="flex flex-col gap-1">
               <label htmlFor="email" className="text-xs font-semibold text-gray-700">
                 Email
               </label>
@@ -140,7 +140,7 @@ const SignUp: FC = () => {
               )}
             </div>
 
-=            <div ref={reg} className="flex flex-col gap-1">
+            <div ref={reg} className="flex flex-col gap-1">
               <label htmlFor="password" className="text-xs font-semibold text-gray-700">
                 Password
               </label>
