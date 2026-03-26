@@ -1,69 +1,77 @@
 import { Service } from "typedi";
 import { Server as HttpServer } from "http";
-import { Server, Socket } from "socket.io"
+import { Server, Socket } from "socket.io";
 import { ISocketService } from "../interfaces/socket.service.interface";
+import { env } from "@/config/env";
+import jwt from "jsonwebtoken";
 
 @Service()
 export class SocketService implements ISocketService {
   private io: Server | null = null;
-  private userSockets: Map<string, string[]> = new Map();
 
   initialize(server: HttpServer): void {
     this.io = new Server(server, {
       cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: env.CLIENT_URL,
+        methods: ["GET", "POST"],
+        credentials: true,
+      },
+      transports: ["websocket"],
+      pingTimeout: 20000,
+      pingInterval: 25000,
+    });
+
+    this.io.use((socket, next) => {
+      try {
+        const token = socket.handshake.auth.token;
+
+        if (!token) return next(new Error("Unauthorized"));
+
+        const decoded: any = jwt.verify(token, env.ACCESS_TOKEN_SECRET);
+
+        socket.data.userId = decoded.id;
+
+        next();
+      } catch (err) {
+        next(new Error("Unauthorized"));
       }
     });
 
     this.io.on("connection", (socket: Socket) => {
-      const userId = socket.handshake.query.userId as string;
-      
-      if (userId) {
-        console.log(`User connected: ${userId} (${socket.id})`);
-        
-        const existingSockets = this.userSockets.get(userId) || [];
-        this.userSockets.set(userId, [...existingSockets, socket.id]);
-        
-        socket.join(`user:${userId}`);
+      const userId = socket.data.userId;
+
+      if (!userId) {
+        socket.disconnect();
+        return;
       }
+
+      console.log(`[Socket] User connected: ${userId} (${socket.id})`);
+
+      socket.join(`user:${userId}`);
 
       socket.on("join-project", (projectId: string) => {
         socket.join(`project:${projectId}`);
-        console.log(`Socket ${socket.id} joined project room: ${projectId}`);
+        console.log(`[Socket] ${socket.id} joined project:${projectId}`);
       });
 
       socket.on("leave-project", (projectId: string) => {
         socket.leave(`project:${projectId}`);
-        console.log(`Socket ${socket.id} left project room: ${projectId}`);
+        console.log(`[Socket] ${socket.id} left project:${projectId}`);
       });
 
-      socket.on("disconnect", () => {
-        if (userId) {
-          const existingSockets = this.userSockets.get(userId) || [];
-          this.userSockets.set(userId, existingSockets.filter(id => id !== socket.id));
-          if (this.userSockets.get(userId)?.length === 0) {
-            this.userSockets.delete(userId);
-          }
-          console.log(`User disconnected: ${userId} (${socket.id})`);
-        }
+      socket.on("disconnect", (reason) => {
+        console.log(`[Socket] User disconnected: ${userId} (${reason})`);
       });
     });
 
-    console.log("Socket.io initialized");
+    console.log("✅ Socket.io initialized");
   }
 
   emitToUser(userId: string, event: string, data: any): void {
-    if (this.io) {
-      console.log(`[SocketService] Emitting event: ${event} to user:${userId}`);
-      this.io.to(`user:${userId}`).emit(event, data);
-    }
+    this.io?.to(`user:${userId}`).emit(event, data);
   }
 
   emitToProject(projectId: string, event: string, data: any): void {
-    if (this.io) {
-      console.log(`[SocketService] Emitting event: ${event} to project:${projectId}`);
-      this.io.to(`project:${projectId}`).emit(event, data);
-    }
+    this.io?.to(`project:${projectId}`).emit(event, data);
   }
 }

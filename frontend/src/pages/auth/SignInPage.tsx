@@ -61,7 +61,9 @@ const SignIn: FC = () => {
         token: res.accessToken
       });
       toast.success(res.message || "Login successful!");
-      navigate("/dashboard", { replace: true });
+      setTimeout(() => {
+        navigate("/dashboard", { replace: true });
+      }, 0);
     } catch (err: any) {
       toast.error(err.message || "Invalid credentials");
     }
