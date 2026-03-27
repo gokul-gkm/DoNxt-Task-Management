@@ -46,10 +46,11 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }
 
     console.log("[Socket] Initializing connection to:", SOCKET_URL);
-
+    console.log("TOKEN:", accessToken);
     const socket = io(SOCKET_URL, {
       auth: { token: accessToken },
       transports: ["websocket", "polling"],
+      withCredentials: true,
       reconnection: true,
       reconnectionAttempts: 10,
       reconnectionDelay: 1000,
