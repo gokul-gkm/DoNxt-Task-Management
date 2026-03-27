@@ -49,7 +49,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     console.log("TOKEN:", accessToken);
     const socket = io(SOCKET_URL, {
       auth: { token: accessToken },
-      transports: ["websocket", "polling"],
+      // transports: ["websocket", "polling"],
       withCredentials: true,
       reconnection: true,
       reconnectionAttempts: 10,
