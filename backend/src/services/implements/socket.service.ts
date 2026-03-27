@@ -16,7 +16,6 @@ export class SocketService implements ISocketService {
         methods: ["GET", "POST"],
         credentials: true,
       },
-      // transports: ["websocket", "polling"],
       pingTimeout: 20000,
       pingInterval: 25000,
     });
