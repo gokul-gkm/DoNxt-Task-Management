@@ -1,15 +1,16 @@
+import { Router } from "express";
 import { authController } from "@/controllers/implements/auth.controller";
 import { asyncHandler } from "@/utils/asyncHandler.utils";
-import { Router } from "express"
+import { AUTH_ROUTES } from "@/constants/routes.constant";
 
 const authRoute = Router();
 
-authRoute.post('/sign-up', asyncHandler(authController.signUp))
-authRoute.post('/verify-email', asyncHandler(authController.verifyEmail))
-authRoute.post('/resend-verification', asyncHandler(authController.resendVerification));
-authRoute.post('/sign-in', asyncHandler(authController.signIn))
-authRoute.post('/forgot-password', asyncHandler(authController.forgotPassword))
-authRoute.post('/reset-password', asyncHandler(authController.resetPassword))
-authRoute.post('/logout', asyncHandler(authController.logOut));
+authRoute.post(AUTH_ROUTES.SIGN_UP, asyncHandler(authController.signUp))
+authRoute.post(AUTH_ROUTES.VERIFY_EMAIL, asyncHandler(authController.verifyEmail))
+authRoute.post(AUTH_ROUTES.RESEND_VERIFICATION, asyncHandler(authController.resendVerification));
+authRoute.post(AUTH_ROUTES.SIGN_IN, asyncHandler(authController.signIn))
+authRoute.post(AUTH_ROUTES.FORGOT_PASSWORD, asyncHandler(authController.forgotPassword))
+authRoute.post(AUTH_ROUTES.RESET_PASSWORD, asyncHandler(authController.resetPassword))
+authRoute.post(AUTH_ROUTES.LOGOUT, asyncHandler(authController.logOut));
 
 export default authRoute; 

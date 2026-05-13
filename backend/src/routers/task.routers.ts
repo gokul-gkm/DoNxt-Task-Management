@@ -3,15 +3,16 @@ import { Router } from "express";
 import { taskController } from "@/controllers/implements/task.controller";
 import { asyncHandler } from "@/utils/asyncHandler.utils";
 import { authMiddleware } from "@/middleware/auth.middleware";
+import { TASK_ROUTES } from "@/constants/routes.constant";
 
 const taskRoute = Router();
 
 taskRoute.use(authMiddleware);
 
-taskRoute.get("/analytics", asyncHandler(taskController.getAnalytics));
-taskRoute.post("/", asyncHandler(taskController.createTask));
-taskRoute.get("/", asyncHandler(taskController.getTasks));
-taskRoute.patch("/:id", asyncHandler(taskController.updateTask));
-taskRoute.delete("/:id", asyncHandler(taskController.deleteTask));
+taskRoute.get(TASK_ROUTES.ANALYTICS, asyncHandler(taskController.getAnalytics));
+taskRoute.post(TASK_ROUTES.BASE, asyncHandler(taskController.createTask));
+taskRoute.get(TASK_ROUTES.BASE, asyncHandler(taskController.getTasks));
+taskRoute.patch(TASK_ROUTES.BY_ID, asyncHandler(taskController.updateTask));
+taskRoute.delete(TASK_ROUTES.BY_ID, asyncHandler(taskController.deleteTask));
 
 export default taskRoute;
