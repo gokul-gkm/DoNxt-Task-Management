@@ -227,7 +227,7 @@ const ResetPasswordPage: FC = () => {
             </div>
           )}
 
-=          <div ref={reg} className="mt-6 pt-5 border-t border-gray-100 text-center text-sm text-gray-500">
+          <div ref={reg} className="mt-6 pt-5 border-t border-gray-100 text-center text-sm text-gray-500">
             Remembered your password?{" "}
             <Link to="/auth/sign-in" className="text-blue-500 hover:text-blue-600 font-bold transition-colors duration-150">
               Back to Login
