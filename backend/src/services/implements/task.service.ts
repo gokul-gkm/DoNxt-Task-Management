@@ -9,6 +9,7 @@ import { ISocketService } from "../interfaces/socket.service.interface";
 
 import { AppError } from "@/utils/custom.error.utils";
 import { responseMessage } from "@/enums/responseMessage";
+import { TASK_MESSAGES } from "@/constants/messages/task.messages";
 
 @Service()
 export class TaskService implements ITaskService {
@@ -35,7 +36,7 @@ export class TaskService implements ITaskService {
       const project = await this._projectRepository.findById(data.projectId);
 
       if (!project || project.userId.toString() !== userId) {
-        throw new AppError("Invalid project", StatusCodes.BAD_REQUEST);
+        throw new AppError(TASK_MESSAGES.INVALID_PROJECT, StatusCodes.BAD_REQUEST);
       }
 
       const task = await this._taskRepository.create({
@@ -49,7 +50,7 @@ export class TaskService implements ITaskService {
 
       return {
         status: true,
-        message: "Task created successfully",
+        message: TASK_MESSAGES.TASK_CREATED,
         data: task,
       };
     } catch (error) {
@@ -70,7 +71,7 @@ export class TaskService implements ITaskService {
 
       return {
         status: true,
-        message: "Tasks fetched successfully",
+        message: TASK_MESSAGES.TASKS_FETCHED,
         data: tasks,
       };
     } catch (error) {
@@ -90,7 +91,7 @@ export class TaskService implements ITaskService {
       const task = await this._taskRepository.findById(taskId);
 
       if (!task || task.userId.toString() !== userId) {
-        throw new AppError("Task not found", StatusCodes.NOT_FOUND);
+        throw new AppError(TASK_MESSAGES.TASK_NOT_FOUND, StatusCodes.NOT_FOUND);
       }
 
       const updated = await this._taskRepository.update(taskId, data);
@@ -103,7 +104,7 @@ export class TaskService implements ITaskService {
 
       return {
         status: true,
-        message: "Task updated successfully",
+        message: TASK_MESSAGES.TASK_UPDATED,
         data: updated,
       };
     } catch (error) {
@@ -123,7 +124,7 @@ export class TaskService implements ITaskService {
       const task = await this._taskRepository.findById(taskId);
 
       if (!task || task.userId.toString() !== userId) {
-        throw new AppError("Task not found", StatusCodes.NOT_FOUND);
+        throw new AppError(TASK_MESSAGES.TASK_NOT_FOUND, StatusCodes.NOT_FOUND);
       }
 
       await this._taskRepository.update(taskId, {
@@ -136,7 +137,7 @@ export class TaskService implements ITaskService {
 
       return {
         status: true,
-        message: "Task deleted successfully",
+        message: TASK_MESSAGES.TASK_DELETED,
       };
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -156,7 +157,7 @@ export class TaskService implements ITaskService {
 
       return {
         status: true,
-        message: "Analytics fetched successfully",
+        message: TASK_MESSAGES.ANALYTICS_FETCHED,
         data,
       };
     } catch (error) {

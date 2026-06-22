@@ -4,6 +4,7 @@ import { Server, Socket } from "socket.io";
 import { ISocketService } from "../interfaces/socket.service.interface";
 import { env } from "@/config/env";
 import jwt from "jsonwebtoken";
+import { ERROR_MESSAGES } from "@/constants/messages/messages.constant";
 
 @Service()
 export class SocketService implements ISocketService {
@@ -24,7 +25,7 @@ export class SocketService implements ISocketService {
       try {
         const token = socket.handshake.auth.token;
 
-        if (!token) return next(new Error("Unauthorized"));
+        if (!token) return next(new Error(ERROR_MESSAGES.UNAUTHORIZED));
 
         const decoded: any = jwt.verify(token, env.ACCESS_TOKEN_SECRET);
 
@@ -32,7 +33,7 @@ export class SocketService implements ISocketService {
 
         next();
       } catch (err) {
-        next(new Error("Unauthorized"));
+        next(new Error(ERROR_MESSAGES.UNAUTHORIZED));
       }
     });
 

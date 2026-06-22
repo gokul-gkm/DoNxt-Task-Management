@@ -1,14 +1,15 @@
 import { StatusCodes } from "http-status-codes"
 import bcrypt from "bcryptjs"
 import { AppError } from "./custom.error.utils";
+import { AUTH_MESSAGES } from "@/constants/messages/auth.messages";
 
 export const passwordHash = async (password: string): Promise<string> => {
     try {
         if (!password) {
-            throw new AppError("Password didn't react the hashing function", StatusCodes.BAD_REQUEST);
+            throw new AppError(AUTH_MESSAGES.PASSWORD_NOT_PROVIDED, StatusCodes.BAD_REQUEST);
         }
         return await bcrypt.hash(password, 10);
     } catch (error) {
-        throw new AppError("Failed to hash password", StatusCodes.INTERNAL_SERVER_ERROR);
+        throw new AppError(AUTH_MESSAGES.PASSWORD_HASH_FAILED, StatusCodes.INTERNAL_SERVER_ERROR);
     }
 }

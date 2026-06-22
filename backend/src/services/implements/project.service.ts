@@ -9,6 +9,7 @@ import { responseMessage } from "@/enums/responseMessage";
 import { ProjectStatsResponse } from "@/interfaces/project.interface";
 import { ITaskRepository } from "@/repositories/interfaces/task.repository.interface";
 import { ISocketService } from "../interfaces/socket.service.interface";
+import { PROJECT_MESSAGES } from "@/constants/messages/project.messages";
 
 @Service()
 export class ProjectService implements IProjectService {
@@ -24,7 +25,7 @@ export class ProjectService implements IProjectService {
   async createProject(userId: string, data: any) {
     try {
       if (!data.name) {
-        throw new AppError("Project name is required", StatusCodes.BAD_REQUEST);
+        throw new AppError(PROJECT_MESSAGES.PROJECT_NAME_REQUIRED, StatusCodes.BAD_REQUEST);
       }
 
       const project = await this._projectRepository.create({
@@ -37,7 +38,7 @@ export class ProjectService implements IProjectService {
 
       return {
         status: true,
-        message: "Project created successfully",
+        message: PROJECT_MESSAGES.PROJECT_CREATED,
         data: project,
       };
     } catch (error) {
@@ -58,7 +59,7 @@ export class ProjectService implements IProjectService {
 
       return {
         status: true,
-        message: "Projects fetched successfully",
+        message: PROJECT_MESSAGES.PROJECTS_FETCHED,
         data: projects,
       };
     } catch (error) {
@@ -78,12 +79,12 @@ export class ProjectService implements IProjectService {
       const project = await this._projectRepository.findById(projectId);
 
       if (!project || project.userId.toString() !== userId) {
-        throw new AppError("Project not found", StatusCodes.BAD_REQUEST);
+        throw new AppError(PROJECT_MESSAGES.PROJECT_NOT_FOUND, StatusCodes.BAD_REQUEST);
       }
 
       return {
         status: true,
-        message: "Project fetched successfully",
+        message: PROJECT_MESSAGES.PROJECTS_FETCHED,
         data: project,
       };
     } catch (error) {
@@ -106,7 +107,7 @@ export class ProjectService implements IProjectService {
       const project = await this._projectRepository.findById(projectId);
 
       if (!project || project.userId.toString() !== userId) {
-        throw new AppError("Project not found", StatusCodes.NOT_FOUND);
+        throw new AppError(PROJECT_MESSAGES.PROJECT_NOT_FOUND, StatusCodes.NOT_FOUND);
       }
 
       const updatedProject = await this._projectRepository.update(projectId, data);
@@ -118,7 +119,7 @@ export class ProjectService implements IProjectService {
 
       return {
         status: true,
-        message: "Project updated successfully",
+        message: PROJECT_MESSAGES.PROJECT_UPDATED,
         data: updatedProject,
       };
     } catch (error) {
@@ -138,7 +139,7 @@ export class ProjectService implements IProjectService {
       const project = await this._projectRepository.findById(projectId);
 
       if (!project || project.userId.toString() !== userId) {
-        throw new AppError("Project not found", StatusCodes.NOT_FOUND);
+        throw new AppError(PROJECT_MESSAGES.PROJECT_NOT_FOUND, StatusCodes.NOT_FOUND);
       }
 
       await this._projectRepository.update(projectId, {
@@ -150,7 +151,7 @@ export class ProjectService implements IProjectService {
 
       return {
         status: true,
-        message: "Project deleted successfully",
+        message: PROJECT_MESSAGES.PROJECT_DELETED,
       };
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -172,7 +173,7 @@ export class ProjectService implements IProjectService {
     const project = await this._projectRepository.findById(projectId);
 
     if (!project || project.userId.toString() !== userId) {
-      throw new AppError("Project not found", StatusCodes.NOT_FOUND);
+      throw new AppError(PROJECT_MESSAGES.PROJECT_NOT_FOUND, StatusCodes.NOT_FOUND);
     }
 
     const stats = await this._projectTaskRepository.getProjectStats(
@@ -188,7 +189,7 @@ export class ProjectService implements IProjectService {
 
     return {
       status: true,
-      message: "Project stats fetched successfully",
+      message: PROJECT_MESSAGES.PROJECT_STATS_FETCHED,
       data: {
         total: stats.total,
         completed: stats.completed,

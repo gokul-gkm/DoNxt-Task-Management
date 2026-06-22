@@ -1,3 +1,4 @@
+import { USER_ROUTES } from "../../constants/routes.constants";
 import { extractErrorMessage } from "../../utils/apiError.utils";
 import { userAxiosInstance } from "../axios";
 
@@ -32,7 +33,7 @@ export interface UserResponse {
 export const userService = {
     getProfile: async ():  Promise<UserResponse> => {
         try {
-            const res = await userAxiosInstance.get('/users/profile');
+            const res = await userAxiosInstance.get(USER_ROUTES.PROFILE);
             return res.data;
         } catch (error) {
             throw new Error(extractErrorMessage(error))
@@ -41,7 +42,7 @@ export const userService = {
 
     updateProfile: async (data: UpdateProfileData): Promise<UserResponse> => {
         try {
-            const res = await userAxiosInstance.patch('/users/profile', data)
+            const res = await userAxiosInstance.patch(USER_ROUTES.PROFILE, data)
             return res.data
         } catch (error) {
             throw new Error(extractErrorMessage(error))
@@ -50,7 +51,7 @@ export const userService = {
 
     changePassword: async (data: ChangePasswordData): Promise<UserResponse> => {
         try {
-            const res = await userAxiosInstance.patch('/users/password', data);
+            const res = await userAxiosInstance.patch(USER_ROUTES.PASSWORD, data);
             return res.data
         } catch (error) {
             throw new Error(extractErrorMessage(error))

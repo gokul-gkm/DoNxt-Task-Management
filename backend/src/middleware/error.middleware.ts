@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { AppError } from "@/utils/custom.error.utils";
 import { ZodError } from "zod";
+import { ERROR_MESSAGES } from "@/constants/messages/messages.constant";
 
 export const globalErrorHandler = (
   err: Error,
@@ -19,7 +20,7 @@ export const globalErrorHandler = (
   if (err instanceof ZodError) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       status: false,
-      message: "Validation failed",
+      message: ERROR_MESSAGES.VALIDATION_FAILED,
       errors: err.flatten(),
     });
   }
@@ -28,6 +29,6 @@ export const globalErrorHandler = (
 
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     success: false,
-    message: "Something went wrong",
+    message: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
   });
 };

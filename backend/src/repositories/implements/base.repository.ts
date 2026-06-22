@@ -2,6 +2,7 @@ import  { Document, Model } from "mongoose";
 
 import { Service } from "typedi";
 import { IBaseRepository } from "../interfaces/base.repository.interface";
+import { REPOSITORY_MESSAGES } from "@/constants/messages/repository.messages";
 
 @Service()
 export abstract class BaseRepository< T extends Document, C = T,> implements IBaseRepository<T, C> {
@@ -16,9 +17,9 @@ export abstract class BaseRepository< T extends Document, C = T,> implements IBa
       return await document.save();
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(`Database Error (save): ${error.message}`);
+        throw new Error(`${REPOSITORY_MESSAGES.SAVE_ERROR} ${error.message}`);
       }
-      throw new Error("Unknown error occurred in save");
+      throw new Error(REPOSITORY_MESSAGES.UNKNOWN_SAVE_ERROR);
     }
   }
 
@@ -27,22 +28,22 @@ async findAll( filter: Record<string, any> = {}, options: any = {}): Promise<T[]
     return await this.model.find(filter, null, options).exec();
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error(`Database Error (findAll): ${error.message}`);
+      throw new Error(`${REPOSITORY_MESSAGES.FIND_ALL_ERROR}: ${error.message}`);
     }
-    throw new Error("Unknown error occurred in findAll");
+    throw new Error(REPOSITORY_MESSAGES.UNKNOWN_FIND_ALL_ERROR);
   }
 }
 
   async findById(id: string): Promise<T | null> {
     try {
       const result = await this.model.findById(id).exec();
-      if (!result) throw new Error(`No record found with ID: ${id}`);
+      if (!result) throw new Error(`${REPOSITORY_MESSAGES.RECORD_NOT_FOUND}: ${id}`);
       return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(`Database Error (findById): ${error.message}`);
+        throw new Error(`${REPOSITORY_MESSAGES.FIND_BY_ID_ERROR}: ${error.message}`);
       }
-      throw new Error("Unknown error occurred in findById");
+      throw new Error(REPOSITORY_MESSAGES.UNKNOWN_FIND_BY_ID_ERROR);
     }
   }
 
@@ -52,9 +53,9 @@ async findAll( filter: Record<string, any> = {}, options: any = {}): Promise<T[]
       return (await doc.save()) as T;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(`Database Error (create): ${error.message}`);
+        throw new Error(`${REPOSITORY_MESSAGES.CREATE_ERROR}: ${error.message}`);
       }
-      throw new Error("Unknown error occurred in create");
+      throw new Error(REPOSITORY_MESSAGES.UNKNOWN_CREATE_ERROR);
     }
   }
 
@@ -64,13 +65,13 @@ async findAll( filter: Record<string, any> = {}, options: any = {}): Promise<T[]
         .findByIdAndUpdate(id, data, { new: true })
         .exec();
       if (!updatedRecord)
-        throw new Error(`Update failed: No record found with ID: ${id}`);
+        throw new Error(`${REPOSITORY_MESSAGES.RECORD_NOT_FOUND}: ${id}`);
       return updatedRecord;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(`Database Error (update): ${error.message}`);
+        throw new Error(`${REPOSITORY_MESSAGES.UPDATE_ERROR}: ${error.message}`);
       }
-      throw new Error("Unknown error occurred in update");
+      throw new Error(REPOSITORY_MESSAGES.UNKNOWN_UPDATE_ERROR);
     }
   }
 
@@ -78,13 +79,13 @@ async findAll( filter: Record<string, any> = {}, options: any = {}): Promise<T[]
     try {
       const deletedRecord = await this.model.findByIdAndDelete(id).exec();
       if (!deletedRecord)
-        throw new Error(`Delete failed: No record found with ID: ${id}`);
+        throw new Error(`${REPOSITORY_MESSAGES.RECORD_NOT_FOUND}: ${id}`);
       return true;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(`Database Error (delete): ${error.message}`);
+        throw new Error(`${REPOSITORY_MESSAGES.DELETE_ERROR}): ${error.message}`);
       }
-      throw new Error("Unknown error occurred in delete");
+      throw new Error(REPOSITORY_MESSAGES.UNKNOWN_DELETE_ERROR);
     }
   }
   
@@ -94,9 +95,9 @@ async findAll( filter: Record<string, any> = {}, options: any = {}): Promise<T[]
         
       } catch (error) {
         if (error instanceof Error) {
-        throw new Error(`Database Error (findOne): ${error.message}`);
+        throw new Error(`${REPOSITORY_MESSAGES.FIND_ONE_ERROR}: ${error.message}`);
       }
-      throw new Error("Unknown error occurred in findOne");
+      throw new Error(REPOSITORY_MESSAGES.UNKNOWN_FIND_ONE_ERROR);
       }
     
   }

@@ -7,6 +7,8 @@ import { AppError } from "@/utils/custom.error.utils";
 import { StatusCodes } from "http-status-codes";
 import bcrypt from "bcryptjs"
 import { passwordHash } from "@/utils/password.utils";
+import { COMMON_MESSAGES } from "@/constants/messages/common.messages";
+import { USER_MESSAGES } from "@/constants/messages/user.messages";
 
 @Service({ id: TOKENS.UserService })
 export class UserService implements IUserService {
@@ -23,7 +25,7 @@ export class UserService implements IUserService {
     }
 
     throw new AppError(
-      "Something went wrong. Please try again later.",
+      COMMON_MESSAGES.INTERNAL_SERVER_ERROR,
       StatusCodes.INTERNAL_SERVER_ERROR
     );
   }
@@ -33,7 +35,7 @@ export class UserService implements IUserService {
         try {
             const user = await this._userRepository.findById(userId);
             if (!user) {
-                throw new AppError("User not found", StatusCodes.NOT_FOUND)
+                throw new AppError(USER_MESSAGES.USER_NOT_FOUND, StatusCodes.NOT_FOUND)
             }
             const { password, ...userWithoutPassword } = user.toObject();
 
@@ -54,17 +56,17 @@ export class UserService implements IUserService {
         try {
             const user = await this._userRepository.findById(userId);
             if (!user) {
-               throw new AppError("User not found", StatusCodes.NOT_FOUND);
+               throw new AppError(USER_MESSAGES.USER_NOT_FOUND, StatusCodes.NOT_FOUND);
             }
             const updated = await this._userRepository.update(userId, data);
             if (!updated) {
-               throw new AppError("Failed to update profile", StatusCodes.BAD_REQUEST);
+               throw new AppError(USER_MESSAGES.PROFILE_UPDATE_FAILED, StatusCodes.BAD_REQUEST);
             }
             const { password, ...userWithoutPassword } = updated.toObject();
 
             return {
                 success: true,
-                message: "Profile updated successfully",
+                message: USER_MESSAGES.PROFILE_UPDATED,
                 user: userWithoutPassword
             }
 
@@ -80,18 +82,18 @@ export class UserService implements IUserService {
         try {
             const user = await this._userRepository.findById(userId);
              if (!user) {
-        throw new AppError("User not found", StatusCodes.NOT_FOUND);
+        throw new AppError(USER_MESSAGES.USER_NOT_FOUND, StatusCodes.NOT_FOUND);
             }
 
             const isPasswordValid = await bcrypt.compare(data.currentPassword, user.password);
              if (!isPasswordValid) {
-        throw new AppError("Current password is incorrect", StatusCodes.BAD_REQUEST);
+        throw new AppError(USER_MESSAGES.CURRENT_PASSWORD_INCORRECT, StatusCodes.BAD_REQUEST);
             }
             const hashedPassword = await passwordHash(data.newPassword);
             await this._userRepository.update(userId, { password: hashedPassword });
             return {
                 success: true,
-                message: "Password changed successfully"
+                message: USER_MESSAGES.PASSWORD_CHANGED
             }
             
         } catch (error) {

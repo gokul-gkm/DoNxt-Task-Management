@@ -7,6 +7,7 @@ import { IAuthController } from "../interfaces/auth.controller.interface";
 import { IAuthService } from "@/services/interfaces/auth.service.interface";
 import { setCookie } from "@/utils/cookie.utils";
 import { ForgotPasswordDTO, ResetPaswordDTO } from "@/dtos/auth.dto";
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "@/constants/messages/messages.constant";
 
 @Service()
 export class AuthController implements IAuthController{
@@ -20,7 +21,7 @@ export class AuthController implements IAuthController{
 
         return res
         .status(StatusCodes.CREATED)
-        .json({ status: true, message: "Signup successful", data: user});
+        .json({ status: true, message: SUCCESS_MESSAGES.SIGNUP, data: user});
     }
 
     verifyEmail = async (req: Request, res: Response): Promise<Response> => {
@@ -30,7 +31,7 @@ export class AuthController implements IAuthController{
         if (!email || !token) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 status: false,
-                message: "Email and token required for verification"
+                message: ERROR_MESSAGES.EMAIL_TOKEN_REQUIRED
             })
         }
         const result = await this._authService.verifyEmail(email, token);
@@ -48,7 +49,7 @@ export class AuthController implements IAuthController{
         if (!email) {
         return res.status(StatusCodes.BAD_REQUEST).json({
             status: false,
-            message: "Email is required",
+            message: ERROR_MESSAGES.EMAIL_REQUIRED,
         });
         }
         const result = await this._authService.resendVerification(email);
@@ -74,7 +75,7 @@ export class AuthController implements IAuthController{
         if (!data.email) {
         return res.status(StatusCodes.BAD_REQUEST).json({
             status: false,
-            message: "Email is required"
+            message: ERROR_MESSAGES.EMAIL_REQUIRED
         })
         }
 
@@ -86,7 +87,7 @@ export class AuthController implements IAuthController{
     resetPassword = async (req: Request, res: Response): Promise<Response> => {
         const data = req.body as ResetPaswordDTO;
         if (!data.email || !data.token || !data.newPassword || !data.confirmPassword) {
-            return res.status(StatusCodes.BAD_REQUEST).json({status: false, message: "Email, token and password fields are required"})
+            return res.status(StatusCodes.BAD_REQUEST).json({status: false, message: ERROR_MESSAGES.PASSWORD_FIELDS_REQUIRED})
         }
         const result = await this._authService.resetPassword(data);
 
@@ -96,11 +97,11 @@ export class AuthController implements IAuthController{
     logOut = async (req: Request, res: Response): Promise<Response> => {
         const refreshToken = req.cookies.refresh_token;
         if (!refreshToken) {
-            return res.status(StatusCodes.BAD_REQUEST).json({message: "No token provided"})
+            return res.status(StatusCodes.BAD_REQUEST).json({message: ERROR_MESSAGES.NO_TOKEN_PROVIDED})
         }
         res.clearCookie("refresh_token");
 
-        return res.status(StatusCodes.OK).json({message: "Logged out successfully"})
+        return res.status(StatusCodes.OK).json({message: SUCCESS_MESSAGES.LOGOUT})
     }
 }
 

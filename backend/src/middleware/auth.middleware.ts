@@ -4,6 +4,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { AuthRequest } from "@/interfaces/api.interface";
 import { responseMessage } from "@/enums/responseMessage";
 import { StatusCodes } from "http-status-codes";
+import { AUTH_MESSAGES } from "@/constants/messages/auth.messages";
 
 export const authMiddleware = async (
   req: AuthRequest,
@@ -17,7 +18,7 @@ export const authMiddleware = async (
     if (!token) {
       return res
         .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: "Access denied. No token provided" });
+        .json({ message: AUTH_MESSAGES.NO_TOKEN_PROVIDED });
     }
 
     const decodedToken = verifyAccessToken(token) as JwtPayload;

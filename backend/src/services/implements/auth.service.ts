@@ -21,6 +21,7 @@ import {
   verifyEmailToken,
 } from "@/utils/jwt.utils";
 import { sendPasswordResetEmail, sendVerificationEmail } from "@/utils/email.utils";
+import { AUTH_MESSAGES } from "@/constants/messages/auth.messages";
 
 @Service()
 export class AuthService implements IAuthService {
@@ -48,7 +49,7 @@ export class AuthService implements IAuthService {
           );
         } else {
           throw new AppError(
-            "User already registered but not verified. Please verify your email.",
+            AUTH_MESSAGES.USER_REGISTERED_NOT_VERIFIED,
             StatusCodes.BAD_REQUEST,
           );
         }
@@ -73,7 +74,7 @@ export class AuthService implements IAuthService {
 
       return {
         status: true,
-        message: "Success! A verification link was sent to your inbox.",
+        message: AUTH_MESSAGES.SIGNUP_SUCCESS,
         email: newUser.email,
       };
     } catch (error) {
@@ -93,13 +94,13 @@ export class AuthService implements IAuthService {
       const existingUser = await this._userRepository.findByEmail(email);
       if (!existingUser) {
         throw new AppError(
-          "User not found. Please register again.",
+          AUTH_MESSAGES.USER_NOT_FOUND_REGISTER,
           StatusCodes.NOT_FOUND,
         );
       }
       if (existingUser && existingUser.is_verified) {
         throw new AppError(
-          "Already verified email. Please login.",
+          AUTH_MESSAGES.ALREADY_VERIFIED,
           StatusCodes.BAD_REQUEST,
         );
       }
@@ -108,7 +109,7 @@ export class AuthService implements IAuthService {
 
       if (decodedEmail !== email) {
         throw new AppError(
-          "Verification link is invalid or expired. Please request a new one.",
+          AUTH_MESSAGES.INVALID_VERIFICATION_LINK,
           StatusCodes.UNAUTHORIZED,
         );
       }
@@ -120,7 +121,7 @@ export class AuthService implements IAuthService {
 
       return {
         status: true,
-        message: "Email verified successfully",
+        message: AUTH_MESSAGES.EMAIL_VERIFIED,
         email: existingUser.email,
         accessToken,
         refreshToken,
@@ -144,13 +145,13 @@ export class AuthService implements IAuthService {
       const existingUser = await this._userRepository.findByEmail(email);
       if (!existingUser) {
         throw new AppError(
-          "No account found with this email address.",
+          AUTH_MESSAGES.NO_ACCOUNT_FOUND,
           StatusCodes.NOT_FOUND,
         );
       }
       if (existingUser.is_verified) {
         throw new AppError(
-          "This email is already verified. Please sign in.",
+          AUTH_MESSAGES.EMAIL_ALREADY_VERIFIED,
           StatusCodes.BAD_REQUEST,
         );
       }
@@ -164,7 +165,7 @@ export class AuthService implements IAuthService {
 
       return {
         status: true,
-        message: "Verification email resent. Please check your inbox.",
+        message: AUTH_MESSAGES.VERIFICATION_RESENT,
       };
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -181,11 +182,11 @@ export class AuthService implements IAuthService {
       const { email, password } = data;
       const existingUser = await this._userRepository.findByEmail(email);
       if (!existingUser) {
-        throw new AppError("Invalid Credentials", StatusCodes.BAD_REQUEST);
+        throw new AppError(AUTH_MESSAGES.INVALID_CREDENTIALS, StatusCodes.BAD_REQUEST);
       }
       if (!existingUser.is_verified) {
         throw new AppError(
-          "Email not verified. Please verify your email.",
+          AUTH_MESSAGES.USER_NOT_VERIFIED,
           StatusCodes.UNAUTHORIZED,
         );
       }
@@ -195,14 +196,14 @@ export class AuthService implements IAuthService {
         existingUser.password,
       );
       if (!comparePassword) {
-        throw new AppError("Incorrect password", StatusCodes.BAD_REQUEST);
+        throw new AppError(AUTH_MESSAGES.INCORRECT_PASSWORD, StatusCodes.BAD_REQUEST);
       }
       const accessToken = generateAccessToken({ id: existingUser._id });
       const refreshToken = generateRefreashToken({ id: existingUser._id });
 
       return {
         status: true,
-        message: "Sign in successfully completed",
+        message: AUTH_MESSAGES.SIGNIN_SUCCESS,
         userId: existingUser._id.toString(),
         userName: existingUser.firstName + " "+ existingUser.lastName,
         email: existingUser.email,
@@ -223,12 +224,12 @@ export class AuthService implements IAuthService {
     }
     }
     
-      async forgotPassword(data: ForgotPasswordDTO): Promise<AuthResponse>{
+    async forgotPassword(data: ForgotPasswordDTO): Promise<AuthResponse>{
     try {
       const { email } = data;
       const existingUser = await this._userRepository.findByEmail(email);
       if (!existingUser) {
-        throw new AppError("User not found", StatusCodes.NOT_FOUND)
+        throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND, StatusCodes.NOT_FOUND)
       }
       const resetToken = emailVerificationToken(email);
 
@@ -240,7 +241,7 @@ export class AuthService implements IAuthService {
 
       return {
         status: true,
-        message: "Password reset link sent to your email."
+        message: AUTH_MESSAGES.PASSWORD_RESET_LINK_SENT
       }
 
     } catch (error) {
@@ -256,27 +257,27 @@ export class AuthService implements IAuthService {
     }
     }
     
-      async resetPassword(data: ResetPaswordDTO): Promise<AuthResponse>{
+    async resetPassword(data: ResetPaswordDTO): Promise<AuthResponse>{
     try {
       const { email, token, newPassword, confirmPassword } = data;
       if (newPassword !== confirmPassword) {
-        throw new AppError("Passwords do not match.", StatusCodes.BAD_REQUEST)
+        throw new AppError(AUTH_MESSAGES.PASSWORD_UNMATCH, StatusCodes.BAD_REQUEST)
       }
       const existingUser = this._userRepository.findByEmail(email);
       if (!existingUser) {
-        throw new AppError("User not found. Please register again.", StatusCodes.NOT_FOUND)
+        throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND_REGISTER, StatusCodes.NOT_FOUND)
       }
       const decodedEmail = verifyEmailToken(token);
 
       if (decodedEmail !== email) {
-        throw new AppError("Reset link is invalid or expired. Please request a new one.", StatusCodes.UNAUTHORIZED)
+        throw new AppError(AUTH_MESSAGES.INVALID_RESET_LINK, StatusCodes.UNAUTHORIZED)
       }
 
       const hashedPassword = await passwordHash(newPassword);
       await this._userRepository.updatePassword(email, hashedPassword)
       return {
         status: true,
-        message: "Password reset successfully. You can now sign in."
+        message: AUTH_MESSAGES.PASSWORD_RESET_SUCCESS
       }
     } catch (error) {
         if (error instanceof AppError) {

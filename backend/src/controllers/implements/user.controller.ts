@@ -6,6 +6,7 @@ import { AuthRequest } from "@/interfaces/api.interface";
 import { AppError } from "@/utils/custom.error.utils";
 import { StatusCodes } from "http-status-codes";
 import { Response } from "express";
+import { ERROR_MESSAGES } from "@/constants/messages/messages.constant";
 
 @Service()
 export class UserController implements IUserController {
@@ -17,7 +18,7 @@ export class UserController implements IUserController {
   getProfile = async (req: AuthRequest, res: Response): Promise<Response> => {
     const userId = req.user?.id;
     if (!userId) {
-      throw new AppError("Unauthorized", StatusCodes.UNAUTHORIZED);
+      throw new AppError(ERROR_MESSAGES.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
     }
     const response = await this.userService.getProfile(userId);
     return res.status(StatusCodes.OK).json(response);
@@ -29,7 +30,7 @@ export class UserController implements IUserController {
   ): Promise<Response> => {
     const userId = req.user?.id;
     if (!userId) {
-      throw new AppError("Unauthorized", StatusCodes.UNAUTHORIZED);
+      throw new AppError(ERROR_MESSAGES.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
     }
     const response = await this.userService.updateProfile(userId, req.body);
     return res.status(StatusCodes.OK).json(response);
@@ -41,7 +42,7 @@ export class UserController implements IUserController {
   ): Promise<Response> => {
     const userId = req.user?.id;
     if (!userId) {
-      throw new AppError("Unauthorized", StatusCodes.UNAUTHORIZED);
+      throw new AppError(ERROR_MESSAGES.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
     }
     const response = await this.userService.changePassword(userId, req.body);
     return res.status(StatusCodes.OK).json(response);

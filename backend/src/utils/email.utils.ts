@@ -2,10 +2,11 @@ import nodemailer from "nodemailer";
 import { verifyEmailTemplate } from "@/templates/verfiyEmail.template";
 import { env } from "@/config/env";
 import { resetPasswordTemplate } from "@/templates/resetPassword.template";
+import { EMAIL_MESSAGES } from "@/constants/messages/email.messages";
 
 const { EMAIL_USER, EMAIL_PASS, CLIENT_URL } = env;
 if (!EMAIL_USER || !EMAIL_PASS) {
-  throw new Error("Missing required environment variables for email sending.");
+  throw new Error(EMAIL_MESSAGES.MISSING_EMAIL_CONFIG);
 }
 
 const transporter = nodemailer.createTransport({
@@ -37,14 +38,14 @@ export const sendVerificationEmail = async ({
     await transporter.sendMail({
       from: `"DoNxt" <${EMAIL_USER}>`,
       to: email,
-      subject: "Verify your DoNxt email",
+      subject: EMAIL_MESSAGES.VERIFY_EMAIL_SUBJECT,
       html,
     });
 
     console.log(`Verification email sent to ${email}`);
   } catch (error) {
     console.error("Email sending error:", error);
-    throw new Error("Failed to send verification email");
+    throw new Error(EMAIL_MESSAGES.VERIFICATION_EMAIL_SEND_FAILED);
   }
 };
 
@@ -61,13 +62,13 @@ export const sendPasswordResetEmail = async ({
     await transporter.sendMail({
       from: `"DoNxt" <${EMAIL_USER}>`,
       to: email,
-      subject: "Reset your DoNxt password",
+      subject: EMAIL_MESSAGES.RESET_PASSWORD_SUBJECT,
       html,
     });
 
     console.log(`Password reset email sent to ${email}`);
   } catch (error) {
     console.error("Password reset email sending error:", error);
-    throw new Error("Failed to send password reset email");
+    throw new Error(EMAIL_MESSAGES.PASSWORD_RESET_EMAIL_SEND_FAILED);
   }
 };

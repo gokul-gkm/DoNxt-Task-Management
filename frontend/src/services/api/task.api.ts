@@ -1,3 +1,4 @@
+import { TASK_ROUTES } from "../../constants/routes.constants";
 import { extractErrorMessage } from "../../utils/apiError.utils";
 import { userAxiosInstance } from "../axios";
 
@@ -31,7 +32,7 @@ export const taskService = {
 
   getAnalytics: async (days: number = 7) => {
     try {
-      const res = await userAxiosInstance.get(`/tasks/analytics?days=${days}`);
+      const res = await userAxiosInstance.get(`${TASK_ROUTES.ANALYTICS}?days=${days}`);
       return res.data;
     } catch (error) {
       throw new Error(extractErrorMessage(error));
@@ -40,7 +41,7 @@ export const taskService = {
   
   createTask: async (data: TaskData) => {
     try {
-      const res = await userAxiosInstance.post("/tasks", data);
+      const res = await userAxiosInstance.post(TASK_ROUTES.BASE, data);
       return res.data;
     } catch (error) {
       throw new Error(extractErrorMessage(error));
@@ -49,7 +50,7 @@ export const taskService = {
   
   updateTask: async (id: string, data: Partial<TaskData>) => {
     try {
-      const res = await userAxiosInstance.patch(`/tasks/${id}`, data);
+      const res = await userAxiosInstance.patch(`${TASK_ROUTES.BASE}/${id}`, data);
       return res.data;
     } catch (error) {
       throw new Error(extractErrorMessage(error));
@@ -58,7 +59,7 @@ export const taskService = {
   
   deleteTask: async (id: string) => {
     try {
-      const res = await userAxiosInstance.delete(`/tasks/${id}`);
+      const res = await userAxiosInstance.delete(`${TASK_ROUTES.BASE}/${id}`);
       return res.data;
     } catch (error) {
       throw new Error(extractErrorMessage(error));

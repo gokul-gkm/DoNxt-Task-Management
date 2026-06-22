@@ -1,3 +1,4 @@
+import { PROJECT_ROUTES } from "../../constants/routes.constants";
 import { extractErrorMessage } from "../../utils/apiError.utils";
 import { userAxiosInstance } from "../axios";
 
@@ -17,7 +18,7 @@ export interface ProjectData {
 export const projectService = {
   getProjects: async () => {
     try {
-      const res = await userAxiosInstance.get("/projects");
+      const res = await userAxiosInstance.get(PROJECT_ROUTES.BASE);
       return res.data;
     } catch (error) {
       throw new Error(extractErrorMessage(error));
@@ -27,7 +28,7 @@ export const projectService = {
   getProjectById: async (id: string) => {
     try {
       console.log("before api req", id);
-      const res = await userAxiosInstance.get(`/projects/${id}`);
+      const res = await userAxiosInstance.get(`${PROJECT_ROUTES.BASE}/${id}`);
       console.log("res",res)
       return res.data;
     } catch (error) {
@@ -37,7 +38,7 @@ export const projectService = {
   
   createProject: async (data: Partial<ProjectData>) => {
     try {
-      const res = await userAxiosInstance.post("/projects", data);
+      const res = await userAxiosInstance.post(PROJECT_ROUTES.BASE, data);
       return res.data;
     } catch (error) {
       throw new Error(extractErrorMessage(error));
@@ -46,7 +47,7 @@ export const projectService = {
   
   updateProject: async (id: string, data: Partial<ProjectData>) => {
     try {
-      const res = await userAxiosInstance.patch(`/projects/${id}`, data);
+      const res = await userAxiosInstance.patch(`${PROJECT_ROUTES.BASE}/${id}`, data);
       return res.data;
     } catch (error) {
       throw new Error(extractErrorMessage(error));
@@ -55,7 +56,7 @@ export const projectService = {
   
   deleteProject: async (id: string) => {
     try {
-      const res = await userAxiosInstance.delete(`/projects/${id}`);
+      const res = await userAxiosInstance.delete(`${PROJECT_ROUTES.BASE}/${id}`);
       return res.data;
     } catch (error) {
       throw new Error(extractErrorMessage(error));
@@ -64,7 +65,7 @@ export const projectService = {
 
   getProjectStats: async (id: string) => {
     try {
-      const res = await userAxiosInstance.get(`/projects/${id}/stats`);
+      const res = await userAxiosInstance.get(`${PROJECT_ROUTES.BASE}/${id}/${PROJECT_ROUTES.STATS}`);
       return res.data;
     } catch (error) {
       throw new Error(extractErrorMessage(error));
